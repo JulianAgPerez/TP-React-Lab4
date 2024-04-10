@@ -1,0 +1,25 @@
+.containerInstrumento{
+    display: flex;
+    align-items: center; 
+    margin:1%;
+    margin-left: 3.5%;
+    margin-bottom: 5rem;
+}
+
+.containerTextoInstrumento{
+    margin-left: 5%;
+}
+
+.robotoTitulo{
+    font-family: "Roboto";
+    font-weight: 300;
+    font-Size: 1.3rem;
+    font-Style: "normal";
+}
+
+.robotoCuerpo{
+    font-family: "Roboto";
+    font-weight: 300;
+    font-Size: 1rem;
+    font-Style: "normal";
+}

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Instrumento } from "../types/types";
-import { ContenedorImage } from "./ContenedorImage";
+import styles from "../styles/Instrumentos.module.css";
 
 const Instrumentos = () => {
-  const [instrumentos, setInstrumentos] = useState<>([]);
+  const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,13 +23,55 @@ const Instrumentos = () => {
     <div>
       {instrumentos.map((instrumento: Instrumento) => (
         <div key={instrumento.id}>
-          <h2>{instrumento.instrumento}</h2>
+          <div className={styles.containerInstrumento}>
+            <img src={`/img/${instrumento.imagen}`} />
 
-          <ContenedorImage imagen={instrumento.imagen} />
+            <div className={styles.containerTextoInstrumento}>
+              <h3 className={styles.robotoTitulo}>{instrumento.instrumento}</h3>
 
-          <p>Marca: {instrumento.marca}</p>
-          <p>Modelo: {instrumento.modelo}</p>
-          <p>Precio: {instrumento.precio}</p>
+              <h2
+                className={styles.robotoCuerpo}
+                style={{ fontSize: "1.6rem", fontWeight: "400" }}
+              >
+                $ {instrumento.precio}
+              </h2>
+
+              <span className={styles.robotoCuerpo}>
+                {instrumento.costoEnvio === "G" ? (
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        color: "lightgreen",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <span
+                        className="material-symbols-outlined"
+                        style={{ marginRight: "5px" }}
+                      >
+                        local_shipping
+                      </span>
+                      <p style={{ margin: "0" }}>Envío gratis a todo el país</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div
+                      style={{ color: "rgb(290, 150, 90)", fontWeight: "bold" }}
+                    >
+                      Costo de Envío interior de Argentina $
+                      {instrumento.costoEnvio}{" "}
+                    </div>
+                  </>
+                )}
+              </span>
+              <p className={styles.robotoCuerpo}>
+                {instrumento.cantidadVendida} vendidos
+              </p>
+            </div>
+          </div>
         </div>
       ))}
     </div>

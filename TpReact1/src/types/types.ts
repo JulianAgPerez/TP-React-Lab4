@@ -5,7 +5,7 @@ export interface Instrumento{
 	modelo: string,
 	imagen: string,
 	precio: number,
-	costoEnvio: number,
+	costoEnvio: string,
 	cantidadVendida: number,
 	descripcion: string
 }
@@ -15,7 +15,7 @@ export const emptyInstrumento = {
 	modelo: "",
 	imagen: "",
 	precio: 0,
-	costoEnvio: 0,
+	costoEnvio: "",
 	cantidadVendida: 0,
 	descripcion: ""
 }

@@ -1,8 +1,7 @@
-import "./App.css";
-import ContenedorImage from "./components/ContenedorImage";
+import Instrumentos from "./components/Instrumentos";
 
 function App() {
-  return <>App</>;
+  return <Instrumentos />;
 }
 
 export default App;

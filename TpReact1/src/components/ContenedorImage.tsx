@@ -11,7 +11,11 @@ export const ContenedorImage = ({ imagen }: Props) => {
     <Container>
       <Row>
         <Col xs={6} md={4}>
-          <Image src={`../../img/${imagen}`} rounded />
+          <Image
+            src={`/img/${imagen}`}
+            rounded
+            //style={{ border: "solid", borderColor: "coral" }}
+          />
         </Col>
       </Row>
     </Container>
