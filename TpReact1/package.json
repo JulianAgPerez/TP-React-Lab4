@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage":"https://julianagperez.github.io/TP-React-Lab4/",
+  "homepage":"https://julianagperez.github.io/TpReact1/",
   "scripts": {
     "predeploy":"npm run build",
     "deploy":"gh-pages -d dist",
