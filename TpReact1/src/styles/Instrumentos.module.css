@@ -6,12 +6,30 @@
     margin-bottom: 5rem;
 }
 
-
-
 .containerTextoInstrumento{
     margin-left: 5%;
 }
-
+/* ------------------------------------------------DISEÑOS DE TEXTO COSTO--------------------------------------------------- */
+.costoEnvio {
+    margin: 20px;
+  }
+  
+  .costoEnvioTexto {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    padding-top: 0.6rem;
+  }
+  
+  .costoEnvioTextoGratis {
+    color: lightgreen;
+  }
+  
+  .costoEnvioTextoPago {
+    color: rgb(290, 150, 90);
+    
+  }
+  /* -----------------------------------------------------FUENTES--------------------------------------------------------- */
 .robotoTitulo{
     font-family: "Roboto";
     font-weight: 300;
@@ -25,20 +43,39 @@
     font-Size: 1rem;
     font-Style: "normal";
 }
+
+.nunito {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.robotoCuerpoNegrita{
+    font-family: "Roboto";
+    font-weight: 400;
+    font-Size: 1rem;
+    font-Style: "normal";
+}
+/* ------------------------------------------------------BOTONES------------------------------------------------------- */
 .button{
     width: 150px;
     height: 50px;
     font-size: 20px;
+    overflow: hidden;
     border: 3px solid rgba(62, 176, 211, 0.664);
+    color: rgba(62, 176, 211, 0.664);
     border-radius: 5%;
     transition: all 0.3s;
 }
+
 .button:hover{
     border-color: rgb(243, 128, 233);
+    color: rgb(243, 128, 233);
     transition: all 0.6s;
-
 }
-/*IMAGEN DETALLE**/
+
+/*----------------------------------------------------IMAGEN DETALLE-----------------------------------------------*/
 .containerInstrumentoDetalle{
     display: flex;
     align-items: center;
@@ -46,6 +83,7 @@
     margin-right: 10%;
     margin-bottom: 5rem;
     margin-left: 5%;
+    
 }
 
 .imgContainerInsDetalle{
@@ -54,4 +92,18 @@
     width: 70%; 
     height: auto; 
     max-height: 50vh;
+}
+/*Linea vertical*/
+.containerTextoDetalle{
+    position: relative;
+    &::after {
+      content: ""; /* Contenido vacío para el pseudoelemento */
+      display: block; 
+      height: 100%; 
+      width: 2px; /* Ancho de la línea vertical */
+      position: absolute; 
+      top: 0; 
+      left: -30px; 
+      background-color: rgba(182, 182, 182, 0.363);
+    }
 }

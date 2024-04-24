@@ -38,35 +38,28 @@ const Instrumentos = () => {
                 $ {instrumento.precio}
               </h2>
 
-              <span className={styles.robotoCuerpo}>
+              <span className={styles.robotoCuerpoNegrita}>
                 {instrumento.costoEnvio === "G" ? (
-                  <>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        color: "lightgreen",
-                        fontWeight: "bold",
-                      }}
+                  <div
+                    className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoGratis}`}
+                  >
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ marginRight: "5px" }}
                     >
-                      <span
-                        className="material-symbols-outlined"
-                        style={{ marginRight: "5px" }}
-                      >
-                        local_shipping
-                      </span>
-                      <p style={{ margin: "0" }}>Envío gratis a todo el país</p>
-                    </div>
-                  </>
+                      local_shipping
+                    </span>
+                    <p style={{ margin: "0" }}>
+                      Envío gratis para todo el país{" "}
+                    </p>
+                  </div>
                 ) : (
-                  <>
-                    <div
-                      style={{ color: "rgb(290, 150, 90)", fontWeight: "bold" }}
-                    >
-                      Costo de Envío interior de Argentina $
-                      {instrumento.costoEnvio}{" "}
-                    </div>
-                  </>
+                  <div
+                    className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoPago}`}
+                  >
+                    Costo de Envío interior de Argentina $
+                    {instrumento.costoEnvio}
+                  </div>
                 )}
               </span>
               <p className={styles.robotoCuerpo}>
@@ -74,7 +67,16 @@ const Instrumentos = () => {
               </p>
             </div>
             <Link to={`/productos/${instrumento.id}`}>
-              <button className={styles.button}>Ver detalles</button>
+              <button
+                className={styles.button}
+                style={{
+                  marginLeft: "2rem",
+                  width: "13vw",
+                  height: "5vw",
+                }}
+              >
+                Ver detalles
+              </button>
             </Link>
           </div>
         </div>

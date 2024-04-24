@@ -36,41 +36,70 @@ export const DetalleInstrumento = () => {
           src={`/img/${instrumento.imagen}`}
         />
         <div className={styles.containerTextoInstrumento}>
-          <p className={styles.robotoCuerpo}>
-            {instrumento.cantidadVendida} vendidos
-          </p>
-          <h3 className={styles.robotoTitulo}>{instrumento.instrumento}</h3>
-          <h2
-            className={styles.robotoCuerpo}
-            style={{ fontSize: "1.6rem", fontWeight: "400" }}
-          >
-            $ {instrumento.precio}
-          </h2>
-          <span className={styles.robotoCuerpo}>
-            {instrumento.costoEnvio === "G" ? (
+          <div className={styles.containerTextoDetalle}>
+            <p className={styles.nunito}>
+              {instrumento.cantidadVendida} vendidos
+            </p>
+            {/* Nombre instrumento */}
+            <h3 className={styles.robotoTitulo}>{instrumento.instrumento}</h3>
+            {/* Precio */}
+            <h2
+              className={styles.robotoCuerpo}
+              style={{ fontSize: "1.6rem", fontWeight: "400" }}
+            >
+              $ {instrumento.precio}
+            </h2>
+            {/*Cuerpo */}
+            <div
+              className={styles.robotoCuerpoNegrita}
+              style={{ listStyleType: "none" }}
+            >
+              <li>Marca: {instrumento.marca}</li>
+              <li>Modelo: {instrumento.modelo}</li>
               <div
+                className={`${styles.robotoCuerpoNegrita} ${styles.costoEnvio}`}
+              >
+                Costo Envio:
+                {instrumento.costoEnvio === "G" ? (
+                  <div
+                    className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoGratis}`}
+                  >
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ marginRight: "5px" }}
+                    >
+                      local_shipping
+                    </span>
+                    <p style={{ margin: "0" }}>Envío gratis </p>
+                  </div>
+                ) : (
+                  <div
+                    className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoPago}`}
+                  >
+                    ${instrumento.costoEnvio}
+                  </div>
+                )}
+              </div>
+              <button
+                className={styles.button}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  color: "lightgreen",
-                  fontWeight: "bold",
+                  marginTop: "2rem",
+                  width: "13vw",
+                  height: "5vw",
                 }}
               >
-                <span
-                  className="material-symbols-outlined"
-                  style={{ marginRight: "5px" }}
-                >
-                  local_shipping
-                </span>
-                <p style={{ margin: "0" }}>Envío gratis a todo el país</p>
-              </div>
-            ) : (
-              <div style={{ color: "rgb(290, 150, 90)", fontWeight: "bold" }}>
-                Costo de Envío interior de Argentina $ {instrumento.costoEnvio}
-              </div>
-            )}
-          </span>
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
+      <div
+        className={styles.robotoCuerpoNegrita}
+        style={{ paddingLeft: "3rem" }}
+      >
+        Descripcion:
+        <div style={{ paddingTop: "2rem" }}>{instrumento.descripcion}</div>
       </div>
     </div>
   );
