@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Instrumento } from "../types/types";
 import styles from "../styles/Instrumentos.module.css";
+import { DetalleInstrumento } from "./DetalleInstrumento";
+import { Link } from "react-router-dom";
 
 const Instrumentos = () => {
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
@@ -71,6 +73,9 @@ const Instrumentos = () => {
                 {instrumento.cantidadVendida} vendidos
               </p>
             </div>
+            <Link to={`/productos/${instrumento.id}`}>
+              <button className={styles.button}>Ver detalles</button>
+            </Link>
           </div>
         </div>
       ))}
