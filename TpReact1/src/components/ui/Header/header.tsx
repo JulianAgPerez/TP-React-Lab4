@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
-import { Link, useHref } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const HeaderHome = () => {
   useEffect(() => {
@@ -13,7 +13,7 @@ export const HeaderHome = () => {
     }
   }, []);
 
-  const handleAnchorClick = (e) => {
+  const handleAnchorClick = (e: any) => {
     const href = e.currentTarget.getAttribute("href");
     if (href && href.startsWith("#")) {
       const element = document.querySelector(href);

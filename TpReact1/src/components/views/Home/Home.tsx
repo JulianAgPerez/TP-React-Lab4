@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import CarouselHome from "../../ui/Carousel/CarouselHome";
 import "./Home.css";
 import { DondeEstamos } from "../DondeEstamos/DondeEstamos";
