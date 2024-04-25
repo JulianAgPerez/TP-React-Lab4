@@ -1,0 +1,27 @@
+.robotoTitulo{
+    font-family: "Roboto";
+    font-weight: 300;
+    font-Size: 1.3rem;
+    font-Style: "normal";
+}
+
+.robotoCuerpo{
+    font-family: "Roboto";
+    font-weight: 300;
+    font-Size: 1rem;
+    font-Style: "normal";
+}
+
+.nunito {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.robotoCuerpoNegrita{
+    font-family: "Roboto";
+    font-weight: 400;
+    font-Size: 1rem;
+    font-Style: "normal";
+}
