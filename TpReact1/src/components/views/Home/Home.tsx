@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import CarouselHome from "../../ui/Carousel/CarouselHome";
 import "./Home.css";
-import { HeaderHome } from "../../ui/Header/header";
+import { DondeEstamos } from "../DondeEstamos/DondeEstamos";
 
 export const Home = () => {
   return (
@@ -20,9 +20,8 @@ export const Home = () => {
           justifyContent: "center",
           display: "flex",
         }}
-      >
-        <button id="button">Ir a listado de instrumentos</button>
-      </Link>
+      ></Link>
+      <DondeEstamos />
     </>
   );
 };

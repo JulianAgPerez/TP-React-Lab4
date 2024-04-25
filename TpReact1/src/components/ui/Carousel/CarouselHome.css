@@ -1,3 +1,5 @@
 .imgSlider{
-    height: 400px;
+    height: 400px!important;
+    padding-left: 4vw;
+    padding-right: 6vw;
 }
