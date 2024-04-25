@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { Instrumento } from "../types/types";
-import styles from "../styles/Instrumentos.module.css";
-import { DetalleInstrumento } from "./DetalleInstrumento";
+import { Instrumento } from "../../types/types";
+import styles from "/src/styles/Instrumentos.module.css";
 import { Link } from "react-router-dom";
 
 const Instrumentos = () => {

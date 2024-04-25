@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Instrumento } from "../types/types";
-import styles from "../styles/Instrumentos.module.css";
+import { Instrumento } from "../../types/types";
+import styles from "/src/styles/Instrumentos.module.css";
 import { useParams } from "react-router-dom";
 
 export const DetalleInstrumento = () => {

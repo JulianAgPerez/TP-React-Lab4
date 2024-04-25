@@ -1,0 +1,50 @@
+#title{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 6vw;
+    text-align: center;
+    color: #3752ac;
+    /*text-shadow: 0.4vw 0px 1px rgba(0, 0, 0, 0.5);  Sombra como la que sale en ejemplo, preferi sombra mas con estetica*/   
+    background-color: #edde9c; /* Lo utilizare para navbar */
+    text-shadow:
+      0 1px 0px rgba(62, 176, 211, 0.664),
+      1px 0 0px rgb(243, 128, 233),
+      1px 2px 1px rgba(62, 176, 211, 0.664),
+      2px 1px 1px rgb(243, 128, 233),
+      2px 3px 2px rgba(62, 176, 211, 0.664),
+      3px 2px 2px rgb(243, 128, 233),
+      3px 4px 2px rgba(62, 176, 211, 0.664),
+      4px 3px 3px rgb(243, 128, 233),
+      4px 5px 3px rgba(62, 176, 211, 0.664),
+      5px 4px 2px rgb(243, 128, 233),
+      5px 6px 2px rgba(62, 176, 211, 0.664),
+      6px 5px 2px rgb(243, 128, 233),
+      6px 7px 1px rgba(62, 176, 211, 0.664),
+      7px 6px 1px rgb(243, 128, 233),
+      7px 8px 0px rgba(62, 176, 211, 0.664),
+      8px 7px 0px rgb(243, 128, 233);
+}
+#cuerpo{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.5vw;
+    font:bold;
+    padding: 2vw;
+}
+
+#button {
+    background-color: #edde9c;
+
+    color: #15a8bb; 
+    padding: 1vw;
+    border: 1px solid #bc1ea7; 
+    border-radius: 13px; 
+    cursor: pointer; 
+    transition: background-color 0.2s ease-in-out; 
+    text-shadow:
+      0 1px 0px #378ab4,
+      1px 0 0px #5dabcd,
+      1px 2px 1px #378ab4,
+  }
+  
+  #button:hover {
+    background-color: #e0e0e0; 
+  }

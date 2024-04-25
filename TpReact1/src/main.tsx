@@ -1,22 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { DetalleInstrumento } from "./components/DetalleInstrumento.tsx";
-import Instrumentos from "./components/Instrumentos.tsx";
-import { Home } from "./routes/Home.tsx";
+import { DetalleInstrumento } from "./components/views/DetalleInstrumento.tsx";
+import Instrumentos from "./components/views/Instrumentos.tsx";
+import { Home } from "./components/views/Home/Home.tsx";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { HeaderHome } from "./components/ui/Header/header.tsx";
+import { Route } from "./routes/Route.tsx";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/productos",
-    element: <Instrumentos />,
-  },
-  {
-    path: "/productos/:id",
-    element: <DetalleInstrumento />,
+    element: <Route />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/productos",
+        element: <Instrumentos />,
+      },
+      {
+        path: "/productos/:id",
+        element: <DetalleInstrumento />,
+      },
+    ],
   },
 ]);
 
