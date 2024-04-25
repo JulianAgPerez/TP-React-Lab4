@@ -34,9 +34,9 @@ export const HeaderHome = () => {
       >
         <Container>
           <Navbar.Brand>
-            <Link to={"/"} className="nav-link">
+            <a href="/#inicio" className="nav-link" onClick={handleAnchorClick}>
               Inicio
-            </Link>
+            </a>
           </Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Item>
