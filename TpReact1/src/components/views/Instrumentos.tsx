@@ -9,9 +9,12 @@ const Instrumentos = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("../../instrumentos.json");
+        const response = await fetch(
+          "http://localhost:8080/instrumentos/productos"
+        );
         const data = await response.json();
-        setInstrumentos(data.instrumentos);
+        setInstrumentos(data);
+        console.log(instrumentos[0].costoEnvio);
       } catch (error) {
         console.error("Error al obtener los instrumentos:", error);
       }
@@ -26,17 +29,17 @@ const Instrumentos = () => {
         <div key={instrumento.id}>
           <div className={styles.containerInstrumento}>
             <img src={`/img/${instrumento.imagen}`} />
-
+            {/* Nombre instrumento */}
             <div className={styles.containerTextoInstrumento}>
               <h3 className={styles.robotoTitulo}>{instrumento.instrumento}</h3>
-
+              {/* Precio */}
               <h2
                 className={styles.robotoCuerpo}
                 style={{ fontSize: "1.6rem", fontWeight: "400" }}
               >
                 $ {instrumento.precio}
               </h2>
-
+              {/*Costo Envio */}
               <span className={styles.robotoCuerpoNegrita}>
                 {instrumento.costoEnvio === "G" ? (
                   <div
@@ -61,6 +64,7 @@ const Instrumentos = () => {
                   </div>
                 )}
               </span>
+              {/*Vendidos */}
               <p className={styles.robotoCuerpo}>
                 {instrumento.cantidadVendida} vendidos
               </p>

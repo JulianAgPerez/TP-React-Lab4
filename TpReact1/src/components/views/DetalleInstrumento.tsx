@@ -10,12 +10,11 @@ export const DetalleInstrumento = () => {
   useEffect(() => {
     const fetchInstrumento = async () => {
       try {
-        const response = await fetch("../../instrumentos.json");
-        const data = await response.json();
-        const instrumentoEncontrado = data.instrumentos.find(
-          (inst: Instrumento) => inst.id.toString() === id
+        const response = await fetch(
+          `http://localhost:8080/instrumentos/productos/${id}`
         );
-        setInstrumento(instrumentoEncontrado);
+        const data = await response.json();
+        setInstrumento(data);
       } catch (error) {
         console.error("Error al obtener el instrumento:", error);
       }
