@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Formik, Field, ErrorMessage } from "formik";
+import { Formik, Field, ErrorMessage, Form } from "formik";
 import { emptyInstrumento } from "../../../types/types";
-import { Button } from "react-bootstrap";
+import { Button, FormGroup, FormLabel } from "react-bootstrap";
 
-const InstrumentoForm = ({ onSubmit, initialValues }) => {
+const InstrumentoForm = ({ initialValues, onSubmit }) => {
   const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
@@ -19,109 +19,79 @@ const InstrumentoForm = ({ onSubmit, initialValues }) => {
 
     fetchCategorias();
   }, []);
-
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit}>
-      {({ values, handleChange, errors, handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="nombre">Nombre:</label>
-            <Field
-              id="nombre"
-              name="nombre"
-              type="text"
-              value={values.nombre}
-              onChange={handleChange}
-              style={{ padding: "10px", border: "1px solid #ccc" }}
-            />
-            <ErrorMessage name="nombre" component="span" />
-          </div>
-          <div>
-            <label htmlFor="categoria">Categoría:</label>
-            <Field
-              id="categoria"
-              name="categoria"
-              as="select"
-              value={values.categoria}
-              onChange={handleChange}
-            >
-              <option value="">Seleccione una categoría</option>
-              {categorias.map((categoria) => (
-                <option key={categoria.id} value={categoria.id}>
-                  {categoria.denominacion}
-                </option>
-              ))}
-            </Field>
-            <ErrorMessage name="categoria" component="span" />
-          </div>
-          <div>
-            <label htmlFor="marca">Marca:</label>
-            <Field
-              id="marca"
-              name="marca"
-              type="text"
-              value={values.marca}
-              onChange={handleChange}
-            />
-            <ErrorMessage name="marca" component="span" />
-          </div>
-          <div>
-            <label htmlFor="modelo">Modelo:</label>
-            <Field
-              id="modelo"
-              name="modelo"
-              type="text"
-              value={values.modelo}
-              onChange={handleChange}
-            />
-            <ErrorMessage name="modelo" component="span" />
-          </div>
-          <div>
-            <label htmlFor="imagen">Imagen URL:</label>
-            <Field
-              id="imagen"
-              name="imagen"
-              type="text"
-              value={values.imagen}
-              onChange={handleChange}
-            />
-            <ErrorMessage name="imagen" component="span" />
-          </div>
-          <div>
-            <label htmlFor="precio">Precio:</label>
-            <Field
-              id="precio"
-              name="precio"
-              type="number"
-              value={values.precio}
-              onChange={handleChange}
-            />
-            <ErrorMessage name="precio" component="span" />
-          </div>
-          <div>
-            <label htmlFor="costoEnvio">Costo de Envío:</label>
-            <Field
-              id="costoEnvio"
-              name="costoEnvio"
-              type="text"
-              value={values.costoEnvio}
-              onChange={handleChange}
-            />
-            <ErrorMessage name="costoEnvio" component="span" />
-          </div>
-          <div>
-            <label htmlFor="descripcion">Descripción:</label>
-            <Field
-              id="descripcion"
-              name="descripcion"
-              as="textarea"
-              value={values.descripcion}
-              onChange={handleChange}
-            />
-            <ErrorMessage name="descripcion" component="span" />
-          </div>
-        </form>
-      )}
+      <Form>
+        <FormGroup>
+          <FormLabel>Instrumento</FormLabel>
+          <Field
+            className="form-control"
+            name="instrumento"
+            type="text"
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Categoría</FormLabel>
+          <Field
+            as="select"
+            className="form-select"
+            name="idCategoria"
+            required
+          >
+            <option value="">Seleccionar categoría</option>
+            {categorias.map((categoria) => (
+              <option key={categoria.id} value={categoria.id}>
+                {categoria.denominacion}
+              </option>
+            ))}
+          </Field>
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Marca</FormLabel>
+          <Field className="form-control" name="marca" type="text" required />
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Modelo</FormLabel>
+          <Field className="form-control" name="modelo" type="text" required />
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Imagen</FormLabel>
+          <Field className="form-control" name="imagen" type="text" required />
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Precio</FormLabel>
+          <Field
+            className="form-control"
+            name="precio"
+            type="number"
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Costo de Envío</FormLabel>
+          <Field
+            className="form-control"
+            name="costoEnvio"
+            type="text"
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Descripción</FormLabel>
+          <Field
+            className="form-control"
+            name="descripcion"
+            as="textarea"
+            rows={4}
+            required
+          />
+        </FormGroup>
+
+        <Button variant="primary" type="submit">
+          Enviar
+        </Button>
+      </Form>
     </Formik>
   );
 };

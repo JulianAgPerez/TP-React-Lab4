@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Instrumento } from "../../../types/types";
 import * as yup from "yup";
 import { Button, Modal } from "react-bootstrap";
@@ -15,6 +15,12 @@ export const ModalForm: FC<modalProps> = ({
   handleClose,
   handleAddInstrumento,
 }) => {
+  const handleSubmit = (values) => {
+    const [isOpen, setIsOpen] = useState(false);
+    // Aquí puedes manejar la lógica para enviar los datos del formulario
+    console.log(values);
+    setIsOpen(false);
+  };
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -22,8 +28,8 @@ export const ModalForm: FC<modalProps> = ({
       </Modal.Header>
       <Modal.Body>
         <InstrumentoForm
-          onSubmit={(values) => handleAddInstrumento(values)} // Pasar valores del formulario
-          initialValues={{ nombre: "", categoria: "" }} // Pass initial values
+          initialValues={{}} // Pasa los valores iniciales del formulario según la interfaz Instrumento
+          onSubmit={handleSubmit}
         />
       </Modal.Body>
       <Modal.Footer>
@@ -37,3 +43,9 @@ export const ModalForm: FC<modalProps> = ({
     </Modal>
   );
 };
+/*
+        <InstrumentoForm
+          onSubmit={(values) => handleAddInstrumento(values)} // Pasar valores del formulario
+          initialValues={{ nombre: "", categoria: "" }} // Pass initial values
+        />
+        */
