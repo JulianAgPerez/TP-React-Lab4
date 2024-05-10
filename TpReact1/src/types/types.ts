@@ -7,7 +7,8 @@ export interface Instrumento{
 	precio: number,
 	costoEnvio: string,
 	cantidadVendida: number,
-	descripcion: string
+	descripcion: string,
+	idCategoria: number
 }
 export const emptyInstrumento = {
     instrumento: "",
@@ -17,5 +18,14 @@ export const emptyInstrumento = {
 	precio: 0,
 	costoEnvio: "",
 	cantidadVendida: 0,
-	descripcion: ""
+	descripcion: "",
+	idCategoria: 0
+}
+export interface categoria {
+	id: number,
+	denominacion: string,
+	baja: boolean
+}
+export const emptyCategoria = {
+	denominacion: "",
 }

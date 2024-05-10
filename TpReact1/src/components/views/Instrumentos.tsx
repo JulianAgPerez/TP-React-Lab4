@@ -2,9 +2,14 @@ import { useState, useEffect } from "react";
 import { Instrumento } from "../../types/types";
 import styles from "/src/styles/Instrumentos.module.css";
 import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import { ModalForm } from "./ModalForm/ModalForm";
 
 const Instrumentos = () => {
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const handleCloseAddModal = () => setShowAddModal(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,9 +27,25 @@ const Instrumentos = () => {
 
     fetchData();
   }, []);
+  const handleAddInstrumento = (newInstrumento: Instrumento) => {
+    // Funcionamiento para agregar instrumento
 
+    setShowAddModal(false);
+  };
   return (
     <div>
+      <div className={styles.agregarInstrumento}>
+        <h2>Agregar Instrumento</h2>
+        <Button variant="primary" onClick={() => setShowAddModal(true)}>
+          Agregar
+        </Button>
+      </div>
+
+      <ModalForm // Use the updated modal name "ModalForm"
+        show={showAddModal}
+        handleClose={handleCloseAddModal}
+        handleAddInstrumento={handleAddInstrumento}
+      />
       {instrumentos.map((instrumento: Instrumento) => (
         <div key={instrumento.id}>
           <div className={styles.containerInstrumento}>
