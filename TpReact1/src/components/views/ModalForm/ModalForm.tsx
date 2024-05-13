@@ -15,12 +15,31 @@ export const ModalForm: FC<modalProps> = ({
   handleClose,
   handleAddInstrumento,
 }) => {
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     const [isOpen, setIsOpen] = useState(false);
-    // Aquí puedes manejar la lógica para enviar los datos del formulario
-    console.log(values);
+    try {
+      // Realizar la solicitud HTTP al servidor
+      const response = await fetch("http://localhost:8080/instrumentos", {
+        method: "POST", // Utiliza POST para crear un nuevo instrumento
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values), // Convierte los valores del formulario a JSON
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al enviar los datos");
+      }
+
+      // Si la solicitud fue exitosa, muestra un mensaje de éxito o redirige a otra página
+      console.log("Datos enviados exitosamente");
+    } catch (error) {
+      console.error("Error al enviar los datos:", error);
+      // Manejar el error, como mostrar un mensaje de error al usuario
+    }
     setIsOpen(false);
   };
+
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
