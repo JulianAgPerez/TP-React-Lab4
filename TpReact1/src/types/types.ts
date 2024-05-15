@@ -8,7 +8,8 @@ export interface Instrumento{
 	costoEnvio: string,
 	cantidadVendida: number,
 	descripcion: string,
-	idCategoria: Categoria
+	idCategoria: Categoria,
+	baja: boolean
 }
 export const emptyInstrumento = {
     instrumento: "",

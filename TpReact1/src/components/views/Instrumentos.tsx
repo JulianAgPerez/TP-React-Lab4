@@ -3,10 +3,16 @@ import { Categoria, Instrumento } from "../../types/types";
 import styles from "/src/styles/Instrumentos.module.css";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { ModalForm } from "./ModalForm/ModalForm";
+import { ModalForm } from "./Modals/ModalForm/ModalForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Bounce, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ModalEdit } from "./Modals/ModalEdit/ModalEdit";
 
 const Instrumentos = () => {
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
+  const [instrumentosBaja, setInstrumentosBaja] = useState<Instrumento[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
   const [selectedCategory, setSelectedCategory] = useState<Categoria | null>();
@@ -14,6 +20,23 @@ const Instrumentos = () => {
   const handleCloseAddModal = () => setShowAddModal(false);
   const [showAddModal, setShowAddModal] = useState(false);
 
+  const [selectedInstrumento, setSelectedInstrumento] = useState<Instrumento>();
+
+  //Mensaje emergente de notificacion
+  function notify(msj: String) {
+    return toast.success(msj + " con éxito!", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+  }
+  //Lista categorias y guarda en setCategorias
   const fetchCategorias = async () => {
     try {
       const response = await fetch(
@@ -25,14 +48,24 @@ const Instrumentos = () => {
       console.error("Error fetching categories:", error);
     }
   };
-
+  //Lista instrumentos
   const fetchInstrumentos = async () => {
     try {
       const response = await fetch(
         "http://localhost:8080/instrumentos/productos"
       );
       const data = await response.json();
-      setInstrumentos(data);
+      // Filtrar los instrumentos con baja = false
+      const instrumentosSinBaja = data.filter(
+        (instrumento: Instrumento) => !instrumento.baja
+      );
+      // Filtrar los instrumentos con baja = true
+      const instrumentosConBaja = data.filter(
+        (instrumento: Instrumento) => instrumento.baja
+      );
+      setInstrumentos(instrumentosSinBaja);
+      //LO USARE PARA LISTAR DADOS DE BAJA
+      setInstrumentosBaja(instrumentosConBaja);
     } catch (error) {
       console.error("Error al obtener los instrumentos:", error);
     }
@@ -45,7 +78,7 @@ const Instrumentos = () => {
 
   const handleAddInstrumento = (newInstrumento: Instrumento) => {
     // Funcionamiento para agregar instrumento
-
+    setInstrumentos([...instrumentos, newInstrumento]);
     setShowAddModal(false);
   };
 
@@ -54,21 +87,60 @@ const Instrumentos = () => {
     const selected = categorias.find(
       (categoria) => categoria.id === categoryId
     );
-
-    console.log("value: ", categoryId);
-    console.log("selected: ", selected?.id);
-    console.log(arrayInstrumentosFiltrados);
-    //console.log("array ", categorias);
-    console.log(categoryId === selected?.id);
-
     setSelectedCategory(selected || null);
   };
-  console.log(selectedCategory);
+  //Filtrado
   const arrayInstrumentosFiltrados = instrumentos.filter(
     (instrumento) => instrumento.idCategoria?.id === selectedCategory?.id
   );
 
   const results = !selectedCategory ? instrumentos : arrayInstrumentosFiltrados;
+
+  const handleEditInstrumento = async (updatedInstrumento: Instrumento) => {
+    const id = updatedInstrumento.id;
+    try {
+      const response = await fetch(
+        `http://localhost:8080/instrumentos/productos/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify(updatedInstrumento),
+        }
+      );
+
+      notify("Editado");
+
+      if (!response.ok) {
+        throw new Error("Error al editar el instrumento");
+      }
+
+      setInstrumentos(instrumentos.filter((instrumento) => !instrumento.baja));
+    } catch (error) {
+      console.error("Error al editar el instrumento:", error);
+    }
+  };
+
+  const handleDeleteInstrumento = async (id: number) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/instrumentos/productos/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      notify("Eliminado");
+      if (!response.ok) {
+        throw new Error("Error al eliminar el instrumento");
+      }
+
+      setInstrumentos(instrumentos.filter((instrumento) => !instrumento.baja));
+    } catch (error) {
+      console.error("Error al eliminar el instrumento:", error);
+    }
+  };
 
   return (
     <div>
@@ -101,76 +173,90 @@ const Instrumentos = () => {
         handleClose={handleCloseAddModal}
         handleAddInstrumento={handleAddInstrumento}
       />
-      {results.map(
-        (instrumento: Instrumento) => (
-          console.log("***********************"),
-          //console.log("IdCategoria: ", instrumento.idCategoria),
-          console.log("SelectedCategory ID: ", selectedCategory?.id),
-          console.log("Todo el objeto: ", selectedCategory),
-          console.log("***********************"),
-          (
-            <div key={instrumento.id}>
-              <div className={styles.containerInstrumento}>
-                <img src={`/img/${instrumento.imagen}`} />
-                {/* Nombre instrumento */}
-                <div className={styles.containerTextoInstrumento}>
-                  <h3 className={styles.robotoTitulo}>
-                    {instrumento.instrumento}
-                  </h3>
-                  {/* Precio */}
-                  <h2
-                    className={styles.robotoCuerpo}
-                    style={{ fontSize: "1.6rem", fontWeight: "400" }}
+      {/* RECORRE ARRAY */}
+      {results.map((instrumento: Instrumento) => (
+        <div key={instrumento.id}>
+          <div className={styles.containerInstrumento}>
+            <img src={`/img/${instrumento.imagen}`} />
+            {/* Nombre instrumento */}
+            <div className={styles.containerTextoInstrumento}>
+              <h3 className={styles.robotoTitulo}>{instrumento.instrumento}</h3>
+              {/* Precio */}
+              <h2
+                className={styles.robotoCuerpo}
+                style={{ fontSize: "1.6rem", fontWeight: "400" }}
+              >
+                $ {instrumento.precio}
+              </h2>
+              {/*Costo Envio */}
+              <span className={styles.robotoCuerpoNegrita}>
+                {instrumento.costoEnvio === "G" ||
+                instrumento.costoEnvio === "g" ? (
+                  <div
+                    className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoGratis}`}
                   >
-                    $ {instrumento.precio}
-                  </h2>
-                  {/*Costo Envio */}
-                  <span className={styles.robotoCuerpoNegrita}>
-                    {instrumento.costoEnvio === "G" ? (
-                      <div
-                        className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoGratis}`}
-                      >
-                        <span
-                          className="material-symbols-outlined"
-                          style={{ marginRight: "5px" }}
-                        >
-                          local_shipping
-                        </span>
-                        <p style={{ margin: "0" }}>
-                          Envío gratis para todo el país{" "}
-                        </p>
-                      </div>
-                    ) : (
-                      <div
-                        className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoPago}`}
-                      >
-                        Costo de Envío interior de Argentina $
-                        {instrumento.costoEnvio}
-                      </div>
-                    )}
-                  </span>
-                  {/*Vendidos */}
-                  <p className={styles.robotoCuerpo}>
-                    {instrumento.cantidadVendida} vendidos
-                  </p>
-                </div>
-                <Link to={`/productos/${instrumento.id}`}>
-                  <button
-                    className={styles.button}
-                    style={{
-                      marginLeft: "2rem",
-                      width: "13vw",
-                      height: "5vw",
-                    }}
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ marginRight: "5px" }}
+                    >
+                      local_shipping
+                    </span>
+                    <p style={{ margin: "0" }}>
+                      Envío gratis para todo el país{" "}
+                    </p>
+                  </div>
+                ) : (
+                  <div
+                    className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoPago}`}
                   >
-                    Ver detalles
-                  </button>
-                </Link>
-              </div>
+                    Costo de Envío interior de Argentina $
+                    {instrumento.costoEnvio}
+                  </div>
+                )}
+              </span>
+              {/*Vendidos */}
+              <p className={styles.robotoCuerpo}>
+                {instrumento.cantidadVendida} vendidos
+              </p>
             </div>
-          )
-        )
-      )}
+            <Button
+              variant="danger"
+              onClick={() => handleDeleteInstrumento(instrumento.id)}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                setSelectedInstrumento(instrumento);
+                setShowAddModal(true);
+              }}
+            >
+              Editar
+            </Button>
+
+            {/* Modal de edición */}
+            <ModalEdit
+              show={showAddModal}
+              handleClose={() => setShowAddModal(false)}
+              handleEditInstrumento={handleEditInstrumento}
+              instrumento={selectedInstrumento!}
+            />
+            <Link to={`/productos/${instrumento.id}`}>
+              <button
+                className={styles.button}
+                style={{
+                  marginLeft: "2rem",
+                  width: "13vw",
+                  height: "5vw",
+                }}
+              >
+                Ver detalles
+              </button>
+            </Link>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
