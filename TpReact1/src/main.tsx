@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Route } from "./routes/Route.tsx";
 import { Provider } from "react-redux";
 import store from "./redux/Store.ts";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
+      <ToastContainer />
     </Provider>
   </React.StrictMode>
 );

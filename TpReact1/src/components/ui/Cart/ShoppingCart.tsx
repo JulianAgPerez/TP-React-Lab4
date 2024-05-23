@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 //import { CartProps } from "../../../types/types";
-import { Cart } from "./Cart";
-
+import Cart from "./Cart";
+//ELIMINAR
 // Tipos de datos
 type Product = {
   id: number;
@@ -15,7 +15,7 @@ type CartItem = {
   quantity: number;
 };
 
-export const ShoppingCart: React.FC<> = ({ subtotal, total }) => {
+export const ShoppingCart: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
   const products: Product[] = [

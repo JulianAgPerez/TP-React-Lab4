@@ -6,11 +6,10 @@ import { Button } from "react-bootstrap";
 import { ModalForm } from "./Modals/ModalForm/ModalForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ModalEdit } from "./Modals/ModalEdit/ModalEdit";
 import Cart from "../ui/Cart/Cart";
-import { ShoppingCart } from "../ui/Cart/ShoppingCart";
+import useNotify from "../../Hooks/useNotify";
 
 const Instrumentos = () => {
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
@@ -23,21 +22,8 @@ const Instrumentos = () => {
   const [showAddModal, setShowAddModal] = useState(false);
 
   const [selectedInstrumento, setSelectedInstrumento] = useState<Instrumento>();
+  const notify = useNotify();
 
-  //Mensaje emergente de notificacion
-  function notify(msj: String) {
-    return toast.success(msj + " con éxito!", {
-      position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
-    });
-  }
   //Lista categorias y guarda en setCategorias
   const fetchCategorias = async () => {
     try {
@@ -171,7 +157,7 @@ const Instrumentos = () => {
             ))}
           </select>
         </div>
-        <ShoppingCart />
+        <Cart />
       </div>
       <ModalForm
         show={showAddModal}

@@ -6,10 +6,12 @@ import { Instrumento } from "../../types/types";
 import { addItem } from "../../redux/slices/CartSlice";
 import styles from "/src/styles/Instrumentos.module.css";
 import { useAppDispatch } from "../../redux/HookReducer";
+import useNotify from "../../Hooks/useNotify";
 
 export const DetalleInstrumento: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [instrumento, setInstrumento] = useState<Instrumento | null>(null);
+  const notify = useNotify();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -30,6 +32,8 @@ export const DetalleInstrumento: React.FC = () => {
 
   const handleAgregarCarrito = () => {
     if (instrumento) {
+      console.log(instrumento);
+      notify("Agregado");
       dispatch(addItem(instrumento));
     }
   };

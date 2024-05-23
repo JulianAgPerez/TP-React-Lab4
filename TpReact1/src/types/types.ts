@@ -31,10 +31,10 @@ export const emptyCategoria = {
 	denominacion: "",
 }
 export interface PedidoDetalle{
-	id:number,
+	id?:number,
 	cantidad:number,
-	instrumento_id:number,
-	pedido_id:number
+	instrumento_id:Instrumento,
+	pedido_id?:number
 }
 export const emptyPedidoDetalle={
 	id:null,

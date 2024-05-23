@@ -1,107 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/Store";
-import { PedidoDetalle } from "../../../types/types";
-
-type CartProps = {
-  pedidoDetalles: PedidoDetalle[];
-};
-
-export const Cart: React.FC<CartProps> = ({ pedidoDetalles }) => {
-  const instrumentos = useSelector((state: RootState) => state.instrumentos);
-
-  const calculateTotal = () => {
-    let total = 0;
-    pedidoDetalles.forEach((pedidoDetalle) => {
-      const instrumento = instrumentos.find(
-        (inst) => inst.id === pedidoDetalle.instrumento_id
-      );
-      if (instrumento) {
-        total += instrumento.precio * pedidoDetalle.cantidad;
-      }
-    });
-    return total;
-  };
-
-  return (
-    <div className="cart">
-      <h2>Carrito de Compras</h2>
-      <ul>
-        {pedidoDetalles.map((pedidoDetalle) => {
-          const instrumento = instrumentos.find(
-            (inst) => inst.id === pedidoDetalle.instrumento_id
-          );
-          return (
-            <li key={pedidoDetalle.id}>
-              {instrumento && (
-                <>
-                  {instrumento.denominacion} x {pedidoDetalle.cantidad} - $
-                  {instrumento.precio * pedidoDetalle.cantidad}
-                </>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-      <div>Total: ${calculateTotal()}</div>
-    </div>
-  );
-};
-
-/*
-
-import React, { useState, useEffect } from "react";
-import { Instrumento, PedidoDetalle } from "../../../types/types";
-import { useFetch } from "../../../Hooks/useFetch";
-
-type CartProps = {
-  cart: PedidoDetalle[];
-  subtotal: number;
-  total: number;
-};
-
-export const Cart: React.FC<CartProps> = ({ cart, subtotal, total }) => {
-  const {
-    data: instrumentos,
-    loading,
-    error,
-  } = useFetch("http://localhost:8080/instrumentos/productos");
-
-  return (
-    <div className="cart">
-      <h2>Carrito de Compras</h2>
-      <ul>
-        {loading && <li>Loading...</li>}
-        {error && <li>Error</li>}
-        {instrumentos &&
-          cart.map((item) => {
-            // Encontrar el instrumento correspondiente en la lista de instrumentos
-            const instrumento = instrumentos.find(
-              (inst: { id: number }) => inst.id === item.instrumento_id
-            );
-            if (!instrumento) return null; // Manejar el caso cuando no se encuentra el instrumento
-
-            return (
-              <li key={item.id}>
-                {instrumento.instrumento} x {item.cantidad} - $
-                {instrumento.precio * item.cantidad}
-              </li>
-            );
-          })}
-      </ul>
-      <div>Subtotal: ${subtotal}</div>
-      <div>Total: ${total}</div>
-    </div>
-  );
-};
-*/
-/*
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../redux/Store";
-import { clearItems } from "../../../redux/slices/CartSlice";
-import styles from "/src/styles/Instrumentos.module.css";
 import { useAppDispatch } from "../../../redux/HookReducer";
+import {
+  addItem,
+  clearItems,
+  reduceItem,
+  removeItem,
+} from "../../../redux/slices/CartSlice";
+import { Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 
 const Cart: React.FC = () => {
   const items = useSelector((state: RootState) => state.cart.items);
@@ -110,7 +19,10 @@ const Cart: React.FC = () => {
   const handleGuardarCarrito = async () => {
     const pedido = {
       fecha: new Date(),
-      total: items.reduce((total, item) => total + item.precio, 0),
+      total: items.reduce(
+        (total, item) => total + item.instrumento_id.precio,
+        0
+      ),
       detalles: items.map((item) => ({
         cantidad: 1, // Suponemos que cada instrumento se agrega una vez
         instrumento_id: item.id,
@@ -137,23 +49,70 @@ const Cart: React.FC = () => {
     }
   };
 
+  const calculateSubtotal = () => {
+    return items.reduce(
+      (total, item) => total + item.instrumento_id.precio * item.cantidad,
+      0
+    );
+  };
+  const calculateTotal = () => {
+    const subtotal = calculateSubtotal();
+    const shippingCost = items.reduce(
+      (total, item) =>
+        total +
+        (item.instrumento_id.costoEnvio === "G"
+          ? 0
+          : parseFloat(item.instrumento_id.costoEnvio)),
+      0
+    );
+    return subtotal + shippingCost;
+  };
+
   return (
-    <div className={styles.carrito}>
+    <div className="cart">
       <h2>Carrito de Compras</h2>
       {items.length === 0 ? (
         <p>El carrito está vacío</p>
       ) : (
         <div>
           <ul>
+            {/*Boton con icono de menos para reducir la cantidad */}
             {items.map((item) => (
               <li key={item.id}>
-                {item.instrumento} - ${item.precio}
+                {item.instrumento_id.instrumento} -
+                <Button
+                  onClick={() => dispatch(reduceItem(item.instrumento_id))}
+                  style={{ fontSize: "0.5em", marginRight: "4px" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faMinus}
+                    style={{ fontSize: "1.5em" }}
+                  />
+                </Button>
+                x{item.cantidad}
+                <Button
+                  onClick={() => dispatch(addItem(item.instrumento_id))}
+                  style={{ fontSize: "0.5em", marginLeft: "4px" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    style={{ fontSize: "1.5em" }}
+                  />
+                </Button>
+                - ${item.instrumento_id.precio * item.cantidad}
               </li>
             ))}
+            {/* Boton con icono de mas para aumentar la cantidad */}
           </ul>
-          <button className={styles.button} onClick={handleGuardarCarrito}>
-            Guardar Carrito
-          </button>
+          <div>Subtotal: ${calculateSubtotal()}</div>
+          <div>Total: ${calculateTotal()}</div>
+          <Button
+            onClick={() => dispatch(clearItems())}
+            style={{ marginRight: "5rem" }}
+          >
+            Cancelar
+          </Button>
+          <Button onClick={handleGuardarCarrito}>Guardar Carrito</Button>
         </div>
       )}
     </div>
@@ -161,4 +120,3 @@ const Cart: React.FC = () => {
 };
 
 export default Cart;
-*/
