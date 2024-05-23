@@ -9,6 +9,8 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ModalEdit } from "./Modals/ModalEdit/ModalEdit";
+import Cart from "../ui/Cart/Cart";
+import { ShoppingCart } from "../ui/Cart/ShoppingCart";
 
 const Instrumentos = () => {
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
@@ -98,6 +100,7 @@ const Instrumentos = () => {
 
   const handleEditInstrumento = async (updatedInstrumento: Instrumento) => {
     const id = updatedInstrumento.id;
+    console.log("Cuerpo de instrumento:", JSON.stringify(updatedInstrumento));
     try {
       const response = await fetch(
         `http://localhost:8080/instrumentos/productos/${id}`,
@@ -155,6 +158,7 @@ const Instrumentos = () => {
             Agregar
           </Button>
         </div>
+
         {/*COMBOBOX CATEGORIA */}
         <div className={styles.filtrarPorCategoria}>
           <h2>Filtrar por Categoría</h2>
@@ -167,6 +171,7 @@ const Instrumentos = () => {
             ))}
           </select>
         </div>
+        <ShoppingCart />
       </div>
       <ModalForm
         show={showAddModal}

@@ -30,3 +30,15 @@ export interface Categoria {
 export const emptyCategoria = {
 	denominacion: "",
 }
+export interface PedidoDetalle{
+	id:number,
+	cantidad:number,
+	instrumento_id:number,
+	pedido_id:number
+}
+export const emptyPedidoDetalle={
+	id:null,
+	cantidad:null,
+	instrumento_id:null,
+	pedido_id:null
+}

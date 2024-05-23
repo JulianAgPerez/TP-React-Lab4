@@ -1,11 +1,16 @@
+import React from "react";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { Instrumento } from "../../types/types";
+import { addItem } from "../../redux/slices/CartSlice";
 import styles from "/src/styles/Instrumentos.module.css";
-import { useParams } from "react-router-dom";
+import { useAppDispatch } from "../../redux/HookReducer";
 
-export const DetalleInstrumento = () => {
+export const DetalleInstrumento: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [instrumento, setInstrumento] = useState<Instrumento>();
+  const [instrumento, setInstrumento] = useState<Instrumento | null>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchInstrumento = async () => {
@@ -23,8 +28,14 @@ export const DetalleInstrumento = () => {
     fetchInstrumento();
   }, [id]);
 
+  const handleAgregarCarrito = () => {
+    if (instrumento) {
+      dispatch(addItem(instrumento));
+    }
+  };
+
   if (!instrumento) {
-    return <div>Instrumento vacio</div>;
+    return <div>Instrumento vacío</div>;
   }
 
   return (
@@ -39,16 +50,13 @@ export const DetalleInstrumento = () => {
             <p className={styles.nunito}>
               {instrumento.cantidadVendida} vendidos
             </p>
-            {/* Nombre instrumento */}
             <h3 className={styles.robotoTitulo}>{instrumento.instrumento}</h3>
-            {/* Precio */}
             <h2
               className={styles.robotoCuerpo}
               style={{ fontSize: "1.6rem", fontWeight: "400" }}
             >
               $ {instrumento.precio}
             </h2>
-            {/*Cuerpo */}
             <div
               className={styles.robotoCuerpoNegrita}
               style={{ listStyleType: "none" }}
@@ -81,11 +89,8 @@ export const DetalleInstrumento = () => {
               </div>
               <button
                 className={styles.button}
-                style={{
-                  marginTop: "2rem",
-                  width: "13vw",
-                  height: "5vw",
-                }}
+                style={{ marginTop: "2rem", width: "13vw", height: "5vw" }}
+                onClick={handleAgregarCarrito}
               >
                 Agregar al carrito
               </button>
@@ -97,7 +102,7 @@ export const DetalleInstrumento = () => {
         className={styles.robotoCuerpoNegrita}
         style={{ paddingLeft: "3rem" }}
       >
-        Descripcion:
+        Descripción:
         <div style={{ paddingTop: "2rem" }}>{instrumento.descripcion}</div>
       </div>
     </div>

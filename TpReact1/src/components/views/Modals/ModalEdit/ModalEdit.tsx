@@ -34,20 +34,6 @@ export const ModalEdit: FC<ModalProps> = ({
     fetchCategorias();
   }, []);
 
-  /* posiblemente borrar */
-  const updateInstrumento = async (id: number) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/instrumentos/productos/${id}`,
-        {
-          method: "PUT",
-        }
-      );
-    } catch (error) {
-      console.error("Error actualizando el instrumento: ", error);
-    }
-  };
-
   const handleSubmit = async (values: Instrumento) => {
     console.log("Formulario enviado:", values);
     handleEditInstrumento(values);
@@ -78,16 +64,19 @@ export const ModalEdit: FC<ModalProps> = ({
                   as="select"
                   className="form-select"
                   name="idCategoria"
-                  value={values.idCategoria}
+                  value={(values.idCategoria as Categoria)?.id || ""}
                   onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                     const { value } = e.target;
-                    setFieldValue("idCategoria", value);
+                    const selectedCategoria = categorias.find(
+                      (c) => c.id === parseInt(value, 10)
+                    );
+                    setFieldValue("idCategoria", selectedCategoria);
                   }}
                   required
                 >
                   <option value="">Seleccionar categoría</option>
                   {categorias.map((categoria: Categoria) => (
-                    <option key={categoria.id} value={String(categoria.id)}>
+                    <option key={categoria.id} value={categoria.id}>
                       {categoria.denominacion}
                     </option>
                   ))}
