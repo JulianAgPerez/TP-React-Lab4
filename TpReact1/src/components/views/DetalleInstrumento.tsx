@@ -1,13 +1,13 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { Instrumento } from "../../types/types";
+import { Instrumento, PedidoDetalle } from "../../types/types";
 import { addItem } from "../../redux/slices/CartSlice";
 import styles from "/src/styles/Instrumentos.module.css";
 import { useAppDispatch } from "../../redux/HookReducer";
+import { toast, Bounce } from "react-toastify";
 
-export const DetalleInstrumento: React.FC = () => {
+export const DetalleInstrumento = () => {
   const { id } = useParams<{ id: string }>();
   const [instrumento, setInstrumento] = useState<Instrumento | null>(null);
   const dispatch = useAppDispatch();
@@ -19,7 +19,7 @@ export const DetalleInstrumento: React.FC = () => {
           `http://localhost:8080/instrumentos/productos/${id}`
         );
         const data = await response.json();
-        setInstrumento(data);
+        setInstrumento(data!);
       } catch (error) {
         console.error("Error al obtener el instrumento:", error);
       }
@@ -28,16 +28,34 @@ export const DetalleInstrumento: React.FC = () => {
     fetchInstrumento();
   }, [id]);
 
+  //Mensaje emergente de notificacion
+  function notify(msj: String) {
+    return toast.success(msj + " con éxito!", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+  }
+
   const handleAgregarCarrito = () => {
     if (instrumento) {
+      console.log("Instrumento ", instrumento, " agregado al carrito");
+      notify("Instrumento agregado");
       dispatch(addItem(instrumento));
+    } else {
+      console.error("No se puede agregar un instrumento nulo al carrito");
     }
   };
 
   if (!instrumento) {
     return <div>Instrumento vacío</div>;
   }
-
   return (
     <div key={instrumento.id}>
       <div className={styles.containerInstrumentoDetalle}>

@@ -22,9 +22,11 @@ export const fetchInstrumentos = createAsyncThunk("instrumentos/fetchInstrumento
 const instrumentoSlice = createSlice({
   name: "instrumentos",
   initialState,
-  reducers: {    setInstrumentos(state, action: PayloadAction<Instrumento[]>) {
-    state.instrumentos = action.payload;
-  },},
+  reducers: {    
+    setInstrumentos(state, action: PayloadAction<Instrumento[]>) {
+      state.instrumentos = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchInstrumentos.pending, (state) => {

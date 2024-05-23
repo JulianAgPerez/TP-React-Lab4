@@ -22,6 +22,7 @@ export const emptyInstrumento = {
 	descripcion: "",
 	idCategoria: null
 }
+
 export interface Categoria {
 	id: number,
 	denominacion: string,
@@ -30,15 +31,27 @@ export interface Categoria {
 export const emptyCategoria = {
 	denominacion: "",
 }
+
 export interface PedidoDetalle{
-	id:number,
+	id?: number,
 	cantidad:number,
 	instrumento_id:number,
-	pedido_id:number
+	pedido_id?:number
 }
 export const emptyPedidoDetalle={
-	id:null,
 	cantidad:null,
 	instrumento_id:null,
 	pedido_id:null
 }
+
+export interface Pedido {
+	id?: number;
+	fechaPedido: Date;
+	totalPedido: number;
+	pedidoDetalles?: PedidoDetalle[];
+  }
+  export const emptyPedido = {
+	fechaPedido: null,
+	totalPedido: null,
+	pedidoDetalles: [null],	//posiblemente modificar
+  }

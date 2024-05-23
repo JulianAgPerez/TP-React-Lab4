@@ -9,7 +9,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ModalEdit } from "./Modals/ModalEdit/ModalEdit";
-import Cart from "../ui/Cart/Cart";
+import { Cart } from "../ui/Cart/Cart";
 import { ShoppingCart } from "../ui/Cart/ShoppingCart";
 
 const Instrumentos = () => {
@@ -171,7 +171,7 @@ const Instrumentos = () => {
             ))}
           </select>
         </div>
-        <ShoppingCart />
+        <Cart />
       </div>
       <ModalForm
         show={showAddModal}
