@@ -42,3 +42,7 @@ export const emptyPedidoDetalle={
 	instrumento_id:null,
 	pedido_id:null
 }
+export interface PreferenceMp{
+	id?:string,
+	statusCode?: number
+}

@@ -30,7 +30,7 @@ const Cart: React.FC = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/pedidos", {
+      const response = await fetch("http://localhost:8080/api/pedidos/crear", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

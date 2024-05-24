@@ -12,6 +12,7 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mercadopago/sdk-react": "^0.0.19",
     "@reduxjs/toolkit": "^2.2.5",
     "@types/react-bootstrap": "^0.32.36",
     "bootstrap": "^5.3.3",
