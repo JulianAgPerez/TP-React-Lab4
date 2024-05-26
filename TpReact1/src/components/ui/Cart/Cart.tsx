@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/Store";
 import { useAppDispatch } from "../../../redux/HookReducer";
@@ -11,24 +11,26 @@ import {
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import { CheckoutMp } from "../CheckoutMp";
+import { PreferenceMp } from "../../../types/types";
+import { createPreferenceMp } from "../../services/FuncionesApi";
+import useNotify from "../../../Hooks/useNotify";
 
 const Cart: React.FC = () => {
   const items = useSelector((state: RootState) => state.cart.items);
+  const notify = useNotify();
   const dispatch = useAppDispatch();
 
   const handleGuardarCarrito = async () => {
+    const detalles = items.map((item) => ({
+      cantidad: item.cantidad,
+      instrumento: item.instrumento_id,
+    }));
     const pedido = {
+      pedidoDetalles: detalles,
       fecha: new Date(),
-      total: items.reduce(
-        (total, item) => total + item.instrumento_id.precio,
-        0
-      ),
-      detalles: items.map((item) => ({
-        cantidad: 1, // Suponemos que cada instrumento se agrega una vez
-        instrumento_id: item.id,
-      })),
     };
-
+    //esto se puede simplificar colocandolo en service
     try {
       const response = await fetch("http://localhost:8080/api/pedidos/crear", {
         method: "POST",
@@ -39,8 +41,8 @@ const Cart: React.FC = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        alert(`El pedido con id ${data.id} se guardó correctamente`);
-        dispatch(clearItems());
+        notify(data.mensaje);
+        //dispatch(clearItems()); //Lo comento para poder usar boton de mercado pago
       } else {
         console.error("Error al guardar el pedido:", data);
       }
@@ -55,6 +57,7 @@ const Cart: React.FC = () => {
       0
     );
   };
+  //Calcula subtotal + costo envio
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
     const shippingCost = items.reduce(
@@ -113,6 +116,7 @@ const Cart: React.FC = () => {
             Cancelar
           </Button>
           <Button onClick={handleGuardarCarrito}>Guardar Carrito</Button>
+          <CheckoutMp />
         </div>
       )}
     </div>

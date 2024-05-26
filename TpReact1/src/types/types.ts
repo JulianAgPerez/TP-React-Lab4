@@ -42,6 +42,18 @@ export const emptyPedidoDetalle={
 	instrumento_id:null,
 	pedido_id:null
 }
+
+export interface Pedido{
+	id?:number,
+	fechaPedido?: Date,
+	totalPedido: number,
+	pedidoDetalles?: PedidoDetalle[]
+}
+export const emptPedido={
+	fechaPedido:null,
+	totalPedido:null,
+	pedidoDetalles:[]
+}
 export interface PreferenceMp{
 	id?:string,
 	statusCode?: number

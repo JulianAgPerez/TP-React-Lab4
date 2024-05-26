@@ -2,19 +2,21 @@ import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 
 import React, { useState } from "react";
 import { PreferenceMp } from "../../types/types";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/Store";
+import { createPreferenceMp } from "../services/FuncionesApi";
 
 export const CheckoutMp = () => {
+  const items = useSelector((state: RootState) => state.cart.items);
   const [idPreference, setIdPreference] = useState<string>("");
 
   const getPreferenceMP = async () => {
-    if (montoCarrito > 0) {
-      const response: PreferenceMp = await createPreferenceMP({
-        id: 0,
-        titulo: "Pedido Musical Hendrix",
-        montoTotal: montoCarrito,
+    if (items.length > 0) {
+      const response: PreferenceMp = await createPreferenceMp({
+        totalPedido: 0,
       });
       console.log("Preference id: " + response.id);
-      if (response) setIdPreference(response.id);
+      if (response) setIdPreference(response.id!);
     } else {
       alert("Agregue al menos un instrumento al carrito");
     }
@@ -25,13 +27,12 @@ export const CheckoutMp = () => {
   }); //crendencial de prueba
   return (
     <>
-      <div>CheckoutMp</div>
       <button onClick={getPreferenceMP} className="btMercadoPago">
         COMPRAR con <br></br> Mercado Pago
       </button>
       <div className={idPreference ? "divVisible" : "divInvisible"}>
         <Wallet
-          initialization={{ preferenceId: "<PREFERENCE_ID>" }}
+          initialization={{ preferenceId: idPreference }}
           customization={{ texts: { valueProp: "smart_option" } }}
         />
       </div>
