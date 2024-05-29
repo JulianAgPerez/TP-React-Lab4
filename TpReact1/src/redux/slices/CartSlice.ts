@@ -18,18 +18,18 @@ const cartSlice = createSlice({
   reducers: {
     addItem: (state, action: PayloadAction<Instrumento>) => {
       const  instrumento  = action.payload;
-      const existingItemIndex = state.items.findIndex(item => item.instrumento_id.id === instrumento.id);
+      const existingItemIndex = state.items.findIndex(item => item.instrumento.id === instrumento.id);
       if (existingItemIndex !== -1) {
         // Si el instrumento ya está en el carrito, aumenta la cantidad en lugar de agregar un nuevo elemento
         state.items[existingItemIndex].cantidad += 1;
       } else {
         // Si el instrumento no está en el carrito, agrégalo con cantidad inicial 1
-        state.items.push({ instrumento_id : instrumento, cantidad: 1 });
+        state.items.push({ instrumento : instrumento, cantidad: 1 });
       }
     },
     reduceItem: (state, action: PayloadAction<Instrumento>) => {
       const instrumento = action.payload;
-      const existingItemIndex = state.items.findIndex(item => item.instrumento_id.id === instrumento.id);
+      const existingItemIndex = state.items.findIndex(item => item.instrumento.id === instrumento.id);
       if (existingItemIndex !== -1) {
         const item = state.items[existingItemIndex];
         if (item.cantidad > 1) {
@@ -41,12 +41,12 @@ const cartSlice = createSlice({
     },
     removeItem: (state, action: PayloadAction<Instrumento>) => {
       const instrumento = action.payload;
-      state.items = state.items.filter(item => item.instrumento_id.id !== instrumento.id);
+      state.items = state.items.filter(item => item.instrumento.id !== instrumento.id);
     },
     updateItemQuantitySuccess: (state, action: PayloadAction<PedidoDetalle>) => {
       // Actualizar el estado local con el pedido detalle actualizado
       const updatedItem = action.payload;
-      const existingItemIndex = state.items.findIndex(item => item.instrumento_id.id === updatedItem.instrumento_id.id);
+      const existingItemIndex = state.items.findIndex(item => item.instrumento.id === updatedItem.instrumento.id);
       if (existingItemIndex !== -1) {
         // Si el pedido detalle existe en el carrito, reemplaza el antiguo por el nuevo
         state.items[existingItemIndex] = updatedItem;

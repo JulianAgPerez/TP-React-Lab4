@@ -33,7 +33,7 @@ export const emptyCategoria = {
 export interface PedidoDetalle{
 	id?:number,
 	cantidad:number,
-	instrumento_id:Instrumento,
+	instrumento:Instrumento,
 	pedido_id?:number
 }
 export const emptyPedidoDetalle={
@@ -44,10 +44,10 @@ export const emptyPedidoDetalle={
 }
 
 export interface Pedido{
-	id?:number,
-	fechaPedido?: Date,
-	totalPedido: number,
-	pedidoDetalles?: PedidoDetalle[]
+	id?:number,				//Lo creo en Back
+	fechaPedido?: Date,		//Lo creo en Back x2
+	totalPedido?: number,	//Lo creo en Back x3
+	pedidoDetalles?: PedidoDetalle[]	//Lo asigno en back x4
 }
 export const emptPedido={
 	fechaPedido:null,
