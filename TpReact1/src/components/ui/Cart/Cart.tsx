@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/Store";
 import { useAppDispatch } from "../../../redux/HookReducer";
@@ -6,15 +6,14 @@ import {
   addItem,
   clearItems,
   reduceItem,
-  removeItem,
 } from "../../../redux/slices/CartSlice";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { CheckoutMp } from "../CheckoutMp";
-import { PreferenceMp } from "../../../types/types";
-import { createPreferenceMp } from "../../services/FuncionesApi";
+import { Pedido, PedidoDetalle } from "../../../types/types";
 import useNotify from "../../../Hooks/useNotify";
+import { setPedidoActual } from "../../../redux/slices/PedidoSlice";
 
 const Cart: React.FC = () => {
   const items = useSelector((state: RootState) => state.cart.items);
@@ -22,15 +21,19 @@ const Cart: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleGuardarCarrito = async () => {
-    const detalles = items.map((item) => ({
+    const detalles: PedidoDetalle[] = items.map((item) => ({
       cantidad: item.cantidad,
-      instrumento: item.instrumento_id,
+      instrumento_id: item.instrumento_id,
     }));
-    const pedido = {
+    const pedido: Pedido = {
       pedidoDetalles: detalles,
-      fecha: new Date(),
+      totalPedido: calculateTotal(),
+      fechaPedido: new Date(),
     };
+    dispatch(setPedidoActual(pedido));
+    console.log(pedido);
     //esto se puede simplificar colocandolo en service
+
     try {
       const response = await fetch("http://localhost:8080/api/pedidos/crear", {
         method: "POST",
@@ -58,6 +61,7 @@ const Cart: React.FC = () => {
     );
   };
   //Calcula subtotal + costo envio
+  //MODIFICAR, NO SE ESTA MULTIPLICANDO EL COSTO DE ENVIO X CANTIDAD
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
     const shippingCost = items.reduce(

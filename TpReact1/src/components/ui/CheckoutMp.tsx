@@ -7,15 +7,15 @@ import { RootState } from "../../redux/Store";
 import { createPreferenceMp } from "../services/FuncionesApi";
 
 export const CheckoutMp = () => {
+  const pedido = useSelector((state: RootState) => state.pedido.pedidoActual);
   const items = useSelector((state: RootState) => state.cart.items);
   const [idPreference, setIdPreference] = useState<string>("");
 
   const getPreferenceMP = async () => {
     if (items.length > 0) {
-      const response: PreferenceMp = await createPreferenceMp({
-        totalPedido: 0,
-      });
+      const response: PreferenceMp = await createPreferenceMp(pedido);
       console.log("Preference id: " + response.id);
+      console.log(pedido);
       if (response) setIdPreference(response.id!);
     } else {
       alert("Agregue al menos un instrumento al carrito");
