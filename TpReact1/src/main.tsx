@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { DetalleInstrumento } from "./components/views/DetalleInstrumento.tsx";
@@ -9,6 +9,8 @@ import { Route } from "./routes/Route.tsx";
 import { Provider } from "react-redux";
 import store from "./redux/Store.ts";
 import { ToastContainer } from "react-toastify";
+import { LoaderPage } from "./components/ui/Loader/LoaderPage.tsx";
+import { Login } from "./components/views/Login/Login.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,7 @@ const router = createBrowserRouter([
         path: "/productos/:id",
         element: <DetalleInstrumento />,
       },
+      { path: "/login", element: <Login /> },
     ],
   },
 ]);

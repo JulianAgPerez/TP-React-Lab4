@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+const base = "http://localhost:8080";
 export function useFetch(url: RequestInfo | URL) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true); //Agregar en un {loading && <li>Loading...</li>} o <Suspense fallback={<div>Loading...</div>}>
@@ -15,7 +15,7 @@ export function useFetch(url: RequestInfo | URL) {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(url, { signal });
+        const response = await fetch(base + url, { signal });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

@@ -1,8 +1,18 @@
 import { useEffect } from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/Store";
+import { useAppDispatch } from "../../../redux/HookReducer";
+import { setLogout } from "../../../redux/slices/AuthSlice";
 
 export const HeaderHome = () => {
+  const dispatch = useAppDispatch();
+  const rol = useSelector((state: any) => state.authUser?.rol);
+  const handleLogout = () => {
+    dispatch(setLogout());
+  };
+
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
@@ -54,6 +64,33 @@ export const HeaderHome = () => {
               </a>
             </Nav.Item>
           </Nav>
+          <Navbar.Collapse className="justify-content-end gap-2">
+            <Navbar.Text>Ingresado como : {rol || "visitante"}</Navbar.Text>
+            <Nav.Item>
+              {rol ? (
+                <div
+                  className="d-flex justify-content--center align-items-center"
+                  onClick={handleLogout}
+                >
+                  <span
+                    style={{ color: "#fff", cursor: "pointer" }}
+                    className="material-symbols-outlined"
+                  >
+                    logout
+                  </span>
+                </div>
+              ) : (
+                <>
+                  <a href="/register" className="nav-link">
+                    Registrarse
+                  </a>
+                  <a href="/login" className="nav-link">
+                    Iniciar sesión
+                  </a>
+                </>
+              )}
+            </Nav.Item>
+          </Navbar.Collapse>
         </Container>
       </Navbar>
     </>
