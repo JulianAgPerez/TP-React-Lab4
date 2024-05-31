@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,10 +8,17 @@ import { setLogout } from "../../../redux/slices/AuthSlice";
 
 export const HeaderHome = () => {
   const dispatch = useAppDispatch();
-  const rol = useSelector((state: any) => state.authUser?.rol);
+  const rolFromState = useSelector((state: RootState) => state.auth?.rol);
+  const [rol, setRol] = useState<string | null>(rolFromState);
+
   const handleLogout = () => {
     dispatch(setLogout());
+    setRol(null); // Actualiza el estado local para reflejar el logout
   };
+
+  useEffect(() => {
+    setRol(rolFromState); // Sincroniza el estado local con el estado de Redux
+  }, [rolFromState]);
 
   useEffect(() => {
     const hash = window.location.hash;

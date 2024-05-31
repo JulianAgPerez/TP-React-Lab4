@@ -12,6 +12,7 @@ import { ModalEdit } from "./Modals/ModalEdit/ModalEdit";
 import Cart from "../ui/Cart/Cart";
 import useNotify from "../../Hooks/useNotify";
 import { useSelector } from "react-redux";
+import { RootState } from "../../redux/Store";
 
 const Instrumentos = () => {
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
@@ -26,7 +27,7 @@ const Instrumentos = () => {
   const [selectedInstrumento, setSelectedInstrumento] = useState<Instrumento>();
   const notify = useNotify();
 
-  const rol = useSelector((state: any) => state.authUser?.rol);
+  const rol = useSelector((state: RootState) => state.auth?.rol);
 
   //Lista categorias y guarda en setCategorias
   const fetchCategorias = async () => {
