@@ -1,8 +1,8 @@
 .containerLogin{
-    width: 100vw;
+    width: 100%;
     height: 100vh;
-    background: rgb(121,9,9);
-    background: linear-gradient(128deg, rgba(121,9,9,1) 6%, rgba(130,20,51,1) 25%, rgb(215, 216, 231) 50%, rgba(68,175,204,1) 75%, rgba(106,140,196,1) 100%);
+    background: rgb(121, 104, 9);
+    background: linear-gradient(128deg, rgb(151, 141, 51) 6%, rgb(166, 168, 30) 50%, rgb(190, 188, 23) 75%, rgb(182, 170, 7) 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,6 +15,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: aquamarine;
+    color: rgb(5, 9, 46);
     border-radius: 0.4rem;
 }
