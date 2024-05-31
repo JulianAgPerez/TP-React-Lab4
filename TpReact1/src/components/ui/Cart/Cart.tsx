@@ -21,7 +21,10 @@ const Cart: React.FC = () => {
   const dispatch = useAppDispatch();
   const [showCheckout, setShowCheckout] = useState<boolean>(false); // Nuevo estado para controlar la visibilidad de CheckoutMp
 
+  const rol = useSelector((state: any) => state.authUser?.rol);
+
   const handleGuardarCarrito = async () => {
+    if (!rol) return notify("Inicie sesion para comprar");
     const detalles: PedidoDetalle[] = items.map((item) => ({
       cantidad: item.cantidad,
       instrumento: item.instrumento,

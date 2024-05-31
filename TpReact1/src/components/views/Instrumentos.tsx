@@ -6,10 +6,12 @@ import { Button } from "react-bootstrap";
 import { ModalForm } from "./Modals/ModalForm/ModalForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import "react-toastify/dist/ReactToastify.css";
 import { ModalEdit } from "./Modals/ModalEdit/ModalEdit";
 import Cart from "../ui/Cart/Cart";
 import useNotify from "../../Hooks/useNotify";
+import { useSelector } from "react-redux";
 
 const Instrumentos = () => {
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
@@ -24,6 +26,8 @@ const Instrumentos = () => {
   const [selectedInstrumento, setSelectedInstrumento] = useState<Instrumento>();
   const notify = useNotify();
 
+  const rol = useSelector((state: any) => state.authUser?.rol);
+
   //Lista categorias y guarda en setCategorias
   const fetchCategorias = async () => {
     try {
@@ -34,6 +38,7 @@ const Instrumentos = () => {
       setCategorias(data);
     } catch (error) {
       console.error("Error fetching categories:", error);
+      console.log("error: ", error);
     }
   };
   //Lista instrumentos
@@ -138,13 +143,14 @@ const Instrumentos = () => {
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         {/*BOTON AGREGAR INSTRUMENTO*/}
-        <div className={styles.agregarInstrumento}>
-          <h2>Agregar Instrumento</h2>
-          <Button variant="primary" onClick={() => setShowAddModal(true)}>
-            Agregar
-          </Button>
-        </div>
-
+        {rol === "Admin" && (
+          <div className={styles.agregarInstrumento}>
+            <h2>Agregar Instrumento</h2>
+            <Button variant="primary" onClick={() => setShowAddModal(true)}>
+              Agregar
+            </Button>
+          </div>
+        )}
         {/*COMBOBOX CATEGORIA */}
         <div className={styles.filtrarPorCategoria}>
           <h2>Filtrar por Categoría</h2>
@@ -210,22 +216,25 @@ const Instrumentos = () => {
                 {instrumento.cantidadVendida} vendidos
               </p>
             </div>
-            <Button
-              variant="danger"
-              onClick={() => handleDeleteInstrumento(instrumento.id)}
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                setSelectedInstrumento(instrumento);
-                setShowAddModal(true);
-              }}
-            >
-              Editar
-            </Button>
-
+            {rol === "Admin" && (
+              <Button
+                variant="danger"
+                onClick={() => handleDeleteInstrumento(instrumento.id)}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </Button>
+            )}
+            {(rol === "Admin" || rol === "Operador") && (
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setSelectedInstrumento(instrumento);
+                  setShowAddModal(true);
+                }}
+              >
+                <FontAwesomeIcon icon={faEdit} />
+              </Button>
+            )}
             {/* Modal de edición */}
             <ModalEdit
               show={showAddModal}
