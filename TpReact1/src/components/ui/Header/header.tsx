@@ -75,6 +75,13 @@ export const HeaderHome = () => {
                 Donde estamos
               </a>
             </Nav.Item>
+            {(rolFromState == "Admin" || rolFromState == "Operador") && (
+              <Nav.Item>
+                <Link to={"/reportes"} className="nav-link">
+                  Reportes
+                </Link>
+              </Nav.Item>
+            )}
           </Nav>
           <Navbar.Collapse className="justify-content-end gap-2">
             <Navbar.Text>Ingresado como : {rol || "visitante"}</Navbar.Text>

@@ -11,6 +11,7 @@ import store from "./redux/Store.ts";
 import { ToastContainer } from "react-toastify";
 import { LoaderPage } from "./components/ui/Loader/LoaderPage.tsx";
 import { Login } from "./components/views/Login/Login.tsx";
+import Reportes from "./components/views/Reportes/Reportes.tsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
         element: <DetalleInstrumento />,
       },
       { path: "/login", element: <Login /> },
+      {
+        path: "/reportes",
+        element: <Reportes />,
+      },
     ],
   },
 ]);
