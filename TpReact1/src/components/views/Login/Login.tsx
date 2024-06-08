@@ -33,7 +33,13 @@ export const Login = () => {
       }
 
       const data = await response.json();
-      dispatch(setLogin({ user: data.nombreUsuario, rol: data.rol }));
+      dispatch(
+        setLogin({
+          user: data.nombreUsuario,
+          password: password,
+          rol: data.rol,
+        })
+      );
       navigate("/");
     } catch (err) {
       alert(err.message);

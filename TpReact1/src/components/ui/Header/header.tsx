@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/Store";
 import { useAppDispatch } from "../../../redux/HookReducer";
-import { setLogout } from "../../../redux/slices/AuthSlice";
+import { setLogin, setLogout } from "../../../redux/slices/AuthSlice";
 
 export const HeaderHome = () => {
   const dispatch = useAppDispatch();
@@ -17,8 +17,13 @@ export const HeaderHome = () => {
   };
 
   useEffect(() => {
-    setRol(rolFromState); // Sincroniza el estado local con el estado de Redux
-  }, [rolFromState]);
+    const storedAuthUser = localStorage.getItem("AuthUser");
+    if (storedAuthUser) {
+      const parsedAuthUser = JSON.parse(storedAuthUser);
+      dispatch(setLogin(parsedAuthUser));
+      setRol(parsedAuthUser.rol);
+    }
+  }, []);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -29,7 +34,7 @@ export const HeaderHome = () => {
       }
     }
   }, []);
-
+  //Me lleva al home y de ahi a la ubicacion
   const handleAnchorClick = (e: any) => {
     const href = e.currentTarget.getAttribute("href");
     if (href && href.startsWith("#")) {

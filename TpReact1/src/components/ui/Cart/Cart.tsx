@@ -21,10 +21,11 @@ const Cart: React.FC = () => {
   const dispatch = useAppDispatch();
   const [showCheckout, setShowCheckout] = useState<boolean>(false); // Nuevo estado para controlar la visibilidad de CheckoutMp
 
-  const rol = useSelector((state: any) => state.authUser?.rol);
+  const usuario = useSelector((state: RootState) => state.auth);
 
   const handleGuardarCarrito = async () => {
-    if (!rol) return notify("Inicie sesion para comprar");
+    if (!usuario.rol) return notify("Inicie sesion para comprar");
+    const credentials = btoa(`${usuario.user}:${usuario.password}`);
     const detalles: PedidoDetalle[] = items.map((item) => ({
       cantidad: item.cantidad,
       instrumento: item.instrumento,
@@ -33,8 +34,10 @@ const Cart: React.FC = () => {
       pedidoDetalles: detalles,
     };
     console.log(pedido);
+    console.log("usuario: ", usuario.user);
+    console.log("Contraseña: ", usuario.password);
+    console.log("credenciales: ", credentials);
     //esto se puede simplificar colocandolo en service
-
     try {
       const response = await fetch("http://localhost:8080/api/pedidos/crear", {
         method: "POST",
