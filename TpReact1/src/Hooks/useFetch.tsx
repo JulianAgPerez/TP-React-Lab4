@@ -1,21 +1,30 @@
 import { useEffect, useState } from "react";
+
 const base = "http://localhost:8080";
-export function useFetch(url: RequestInfo | URL) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true); //Agregar en un {loading && <li>Loading...</li>} o <Suspense fallback={<div>Loading...</div>}>
+
+export function useFetch(
+  url: RequestInfo | URL,
+  params: Record<string, any> = {}
+) {
+  const [data, setData] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
   const [controller, setController] = useState<AbortController | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const abortController = new AbortController(); //Evita que se haga la request al sv en caso de cerrar la pagina, etc
+    const abortController = new AbortController();
     setController(abortController);
     const signal = abortController.signal;
+
+    // Construct URL with query parameters
+    const queryParams = new URLSearchParams(params).toString();
+    const fetchUrl = `${base}${url}?${queryParams}`;
 
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(base + url, { signal });
+        const response = await fetch(fetchUrl, { signal });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -27,36 +36,24 @@ export function useFetch(url: RequestInfo | URL) {
             setError(error);
           }
         } else {
-          setError(new Error("Ha ocurrido un error desconocido"));
+          setError(new Error("An unknown error occurred"));
         }
       } finally {
         setLoading(false);
       }
-      return () => abortController.abort();
     };
+
     fetchData();
-  }, [url]);
+
+    return () => abortController.abort();
+  }, [url, params]);
 
   const handleCancelRequest = () => {
     if (controller) {
       controller.abort();
-      console.error("Request cancelada");
+      console.error("Request canceled");
     }
   };
 
   return { data, loading, error, handleCancelRequest };
 }
-
-/*
-//Con Promise Chaining
-useEffect(() => {
-  setLoading(true);
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => setData(data))
-    .catch((error) => setError(error))
-    .finally(() => setLoading(false));
-});
-
-return { data, loading, error };
-*/
