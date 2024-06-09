@@ -13,6 +13,8 @@ import { LoaderPage } from "./components/ui/Loader/LoaderPage.tsx";
 import { Login } from "./components/views/Login/Login.tsx";
 import Reportes from "./components/views/Reportes/Reportes.tsx";
 
+export const baseUrl = import.meta.env.VITE_API_URL;
+
 const router = createBrowserRouter([
   {
     element: <Route />,
