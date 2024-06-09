@@ -107,3 +107,6 @@
       background-color: rgba(182, 182, 182, 0.363);
     }
 }
+.hidden {
+  display: none !important;
+}

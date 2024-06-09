@@ -7,6 +7,7 @@ import { addItem } from "../../redux/slices/CartSlice";
 import styles from "/src/styles/Instrumentos.module.css";
 import { useAppDispatch } from "../../redux/HookReducer";
 import useNotify from "../../Hooks/useNotify";
+import html2pdf from "html2pdf.js";
 
 export const DetalleInstrumento: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -38,12 +39,32 @@ export const DetalleInstrumento: React.FC = () => {
     }
   };
 
+  const handleDescargarPDF = () => {
+    // Ocultar los botones antes de generar el PDF
+    document.querySelectorAll(".no-print").forEach((element) => {
+      element.classList.add(styles.hidden);
+    });
+
+    const element = document.getElementById("instrumento-detalle");
+    if (element) {
+      html2pdf()
+        .from(element)
+        .save(`detalle_instrumento_${id}.pdf`)
+        .then(() => {
+          // Mostrar los botones después de generar el PDF
+          document.querySelectorAll(".no-print").forEach((element) => {
+            element.classList.remove(styles.hidden);
+          });
+        });
+    }
+  };
+
   if (!instrumento) {
     return <div>Instrumento vacío</div>;
   }
 
   return (
-    <div key={instrumento.id}>
+    <div id="instrumento-detalle" key={instrumento.id}>
       <div className={styles.containerInstrumentoDetalle}>
         <img
           className={styles.imgContainerInsDetalle}
@@ -91,13 +112,22 @@ export const DetalleInstrumento: React.FC = () => {
                   </div>
                 )}
               </div>
-              <button
-                className={styles.button}
-                style={{ marginTop: "2rem", width: "13vw", height: "5vw" }}
-                onClick={handleAgregarCarrito}
-              >
-                Agregar al carrito
-              </button>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button
+                  className={`${styles.button} no-print`}
+                  style={{ marginTop: "2rem", width: "13vw", height: "5vw" }}
+                  onClick={handleAgregarCarrito}
+                >
+                  Agregar al carrito
+                </button>
+                <button
+                  className={`${styles.button} no-print`}
+                  style={{ marginTop: "2rem", width: "13vw", height: "5vw" }}
+                  onClick={handleDescargarPDF}
+                >
+                  Descargar PDF
+                </button>
+              </div>
             </div>
           </div>
         </div>

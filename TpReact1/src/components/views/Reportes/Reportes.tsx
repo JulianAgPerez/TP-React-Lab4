@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -9,9 +8,14 @@ import {
   YAxis,
   Tooltip,
   Legend,
+  Label,
 } from "recharts";
 import { useFetch } from "../../../Hooks/useFetch";
-
+import { useState } from "react";
+import DatePicker from "react-date-picker";
+import "react-datepicker/dist/react-datepicker.css";
+import { Button } from "react-bootstrap";
+import styles from "./Reportes.module.css";
 const COLORS = [
   "#0088FE",
   "#00C49F",
@@ -26,21 +30,22 @@ const COLORS = [
 ];
 
 const Reportes = () => {
-  const urlMesYAnio = `/api/pedidos/contar-por-mes-anio?mes=${5}&anio=${2024}`;
-
-  /*
+  const mes = 5;
+  const anio = 2024;
+  const urlMesYAnio = `/api/pedidos/contar-por-mes-anio?mes=${mes}&anio=${anio}`;
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const {
     data: dataPorMesYAnio,
     loading: loadingMesYAnio,
     error: errorMesYAnio,
   } = useFetch(urlMesYAnio);
-   */
+
   const {
     data: dataPorInstrumento,
     loading: loadingInstrumento,
     error: errorInstrumento,
   } = useFetch("/api/pedidos/contar-por-instrumento");
-  /*
+
   if (loadingMesYAnio || loadingInstrumento) {
     return <div>Cargando...</div>;
   }
@@ -50,28 +55,81 @@ const Reportes = () => {
       <div>Error: {errorMesYAnio?.message || errorInstrumento?.message}</div>
     );
   }
-    */
-  //console.log("data: ", dataPorMesYAnio);
+  // Transformar los datos de cantidad por mes y año para el gráfico de barras
+  const transformedDataFecha = dataPorMesYAnio!.map((entry: any) => ({
+    dia: entry[0],
+    cantidad: entry[1],
+  }));
+  console.log("data de cantidad en mes y año: ", dataPorMesYAnio);
+  console.log("Data transormada de fecha: ", transformedDataFecha);
   console.log("data instrumento: ", dataPorInstrumento);
-  if (!dataPorInstrumento) {
-    return "Data de instrumento nulo";
-  }
-  const transformedData = dataPorInstrumento.map((entry: any) => ({
+
+  const transformedData = dataPorInstrumento!.map((entry: any) => ({
     instrumento: entry[1].instrumento, // Suponemos que el nombre del instrumento está en la segunda posición
     count: entry[0], // Suponemos que la cantidad está en la primera posición
   }));
 
-  console.log("data instrumento transformado: ", transformedData);
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    // Aquí puedes realizar acciones adicionales con la fecha seleccionada
+  };
+  const handleDowloadExcel = async () => {
+    try {
+      let urlServer =
+        "http://localhost:8080/api/reporte?fechaDesde=2023-01-01&fechaHasta=2024-12-31";
+      const response = await fetch(urlServer, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      // Aquí puedes manejar la respuesta, por ejemplo, descargar el archivo
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "reporte_pedidos.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error al descargar el archivo:", error);
+    }
+  };
   return (
-    <div>
-      <h2>Reportes</h2>
+    <div className={styles.centerContent}>
+      <h2>
+        Reportes <Button onClick={handleDowloadExcel}>Descargar excel</Button>
+      </h2>
 
-      {/* Gráfico de barras para count por mes y año 
+      {/* Gráfico de barras para count por mes y año */}
 
-      <h3>Count por mes y año</h3>
-      <BarChart width={600} height={300} data={dataPorMesYAnio}>
-        <XAxis dataKey="mes" />
-        <YAxis />
+      <h3>
+        Cantidad de pedidos por día en la fecha {selectedDate.getFullYear()}/
+        {selectedDate.getMonth() + 1}
+        {/** puedo agregar un componente que incremente o decremente el año y luego hacer la busqueda */}
+        <DatePicker
+          onChange={handleDateChange}
+          value={selectedDate}
+          format="MM/yyyy"
+          calendarIcon={null} // Oculta el ícono del calendario
+          clearIcon={null} // Oculta el ícono para borrar la fecha
+          maxDetail="year" // Muestra solo año y mes
+        />
+      </h3>
+
+      <BarChart width={600} height={300} data={transformedDataFecha}>
+        <XAxis dataKey="dia">
+          <Label value="Día" position="insideBottom" offset={-5} />
+        </XAxis>
+        <YAxis>
+          <Label value="Pedidos" angle={-90} position="insideLeft" offset={7} />
+        </YAxis>
         <Tooltip />
         <Legend />
         <Bar dataKey="cantidad" fill="#8884d8" />
