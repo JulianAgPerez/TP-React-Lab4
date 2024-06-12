@@ -49,6 +49,7 @@ const Instrumentos = () => {
   // Lista instrumentos
   const fetchInstrumentos = async () => {
     try {
+      console.log("toy en fetch instrumentos");
       const response = await fetch(
         "http://localhost:8080/instrumentos/productos"
       );
@@ -72,7 +73,7 @@ const Instrumentos = () => {
   useEffect(() => {
     fetchCategorias();
     fetchInstrumentos();
-  }, [selectedCategory, instrumentos]); // Re-fetch instruments
+  }, [selectedCategory]); // Re-fetch instruments
 
   const handleAddInstrumento = (newInstrumento: Instrumento) => {
     // Funcionamiento para agregar instrumento
@@ -117,6 +118,7 @@ const Instrumentos = () => {
       }
 
       setInstrumentos(instrumentos.filter((instrumento) => !instrumento.baja));
+      fetchInstrumentos();
     } catch (error) {
       console.error("Error al editar el instrumento:", error);
     }
@@ -136,6 +138,7 @@ const Instrumentos = () => {
       }
 
       setInstrumentos(instrumentos.filter((instrumento) => !instrumento.baja));
+      fetchInstrumentos();
     } catch (error) {
       console.error("Error al eliminar el instrumento:", error);
     }
