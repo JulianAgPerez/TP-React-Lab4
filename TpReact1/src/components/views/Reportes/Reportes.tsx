@@ -30,10 +30,13 @@ const COLORS = [
 ];
 
 const Reportes = () => {
-  const mes = 5;
-  const anio = 2024;
-  const urlMesYAnio = `/api/pedidos/contar-por-mes-anio?mes=${mes}&anio=${anio}`;
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [anio, setAnio] = useState(selectedDate.getFullYear());
+  const [mes, setMes] = useState(selectedDate.getMonth() + 1);
+  const [fechaDesde, setFechaDesde] = useState();
+  const [fechaHasta, setFechaHasta] = useState();
+
+  const urlMesYAnio = `/api/pedidos/contar-por-mes-anio?mes=${mes}&anio=${anio}`;
   const {
     data: dataPorMesYAnio,
     loading: loadingMesYAnio,
@@ -69,9 +72,11 @@ const Reportes = () => {
     count: entry[0], // Suponemos que la cantidad está en la primera posición
   }));
 
-  const handleDateChange = (date) => {
+  const handleDateChange = (event) => {
+    const date = new Date(event.target.value);
     setSelectedDate(date);
-    // Aquí puedes realizar acciones adicionales con la fecha seleccionada
+    setAnio(date.getFullYear());
+    setMes(date.getMonth() + 1);
   };
   const handleDowloadExcel = async () => {
     try {
@@ -88,7 +93,7 @@ const Reportes = () => {
         throw new Error("Network response was not ok");
       }
 
-      // Aquí puedes manejar la respuesta, por ejemplo, descargar el archivo
+      //Aca manejo la respuesta
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -111,15 +116,13 @@ const Reportes = () => {
 
       <h3>
         Cantidad de pedidos por día en la fecha {selectedDate.getFullYear()}/
-        {selectedDate.getMonth() + 1}
-        {/** puedo agregar un componente que incremente o decremente el año y luego hacer la busqueda */}
-        <DatePicker
+        {selectedDate.getMonth() + 2}
+      </h3>
+      <h3>
+        <input
+          type="month"
+          value={`${anio}-${String(mes + 1).padStart(2, "0")}`}
           onChange={handleDateChange}
-          value={selectedDate}
-          format="MM/yyyy"
-          calendarIcon={null} // Oculta el ícono del calendario
-          clearIcon={null} // Oculta el ícono para borrar la fecha
-          maxDetail="year" // Muestra solo año y mes
         />
       </h3>
 
@@ -136,7 +139,7 @@ const Reportes = () => {
       </BarChart>
 
       {/* Gráfico de torta para count por instrumento */}
-      <h3>Count por instrumento</h3>
+      <h3>Instrumentos mas vendidos</h3>
       <PieChart width={600} height={400}>
         <Pie
           data={transformedData!}

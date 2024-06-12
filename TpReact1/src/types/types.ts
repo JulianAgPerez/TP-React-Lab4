@@ -58,3 +58,8 @@ export interface PreferenceMp{
 	id?:string,
 	statusCode?: number
 }
+export enum Roles{
+	ADMIN = "Admin",
+	OPERADOR = "Operador",
+	VISOR = "Visor"
+}

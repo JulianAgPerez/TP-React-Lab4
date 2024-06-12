@@ -35,12 +35,10 @@ export const CheckoutMp: React.FC<CheckoutMpProps> = ({ visible }) => {
   initMercadoPago("TEST-423c43af-d3f4-44bd-b225-b6ecf502d987", {
     locale: "es-AR",
   }); //crendencial de prueba
-  return (
-    <>
-      <Wallet
-        initialization={{ preferenceId: idPreference }}
-        customization={{ texts: { valueProp: "smart_option" } }}
-      />
-    </>
-  );
+  return idPreference ? (
+    <Wallet
+      initialization={{ preferenceId: idPreference }}
+      customization={{ texts: { valueProp: "smart_option" } }}
+    />
+  ) : null;
 };
