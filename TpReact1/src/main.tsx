@@ -11,9 +11,9 @@ import store from "./redux/Store.ts";
 import { ToastContainer } from "react-toastify";
 import { Login } from "./components/views/Login/Login.tsx";
 import Reportes from "./components/views/Reportes/Reportes.tsx";
-import RolUsuario from "./ControlAcceso/RutaUsuario.tsx";
 import { Roles } from "./types/types.ts";
 import { RutaPrivada } from "./ControlAcceso/RutaPrivada.tsx";
+import { Register } from "./components/views/Register/Register.tsx";
 
 export const baseUrl = import.meta.env.VITE_API_URL;
 
@@ -34,6 +34,7 @@ const router = createBrowserRouter([
         element: <DetalleInstrumento />,
       },
       { path: "/login", element: <Login /> },
+      { path: "/register", element: <Register /> },
       {
         path: "/reportes",
         element: (
