@@ -3,4 +3,18 @@
     flex-direction: column;
     align-items: center;
   }
+  .centerContentMargin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
   
+  .spacing {
+    margin-bottom: 10px;
+  }
+  
+  .inputSpacing {
+    margin-left: 10px;
+    margin-right: 10px;
+  }

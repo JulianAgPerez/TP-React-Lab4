@@ -12,10 +12,9 @@ import {
 } from "recharts";
 import { useFetch } from "../../../Hooks/useFetch";
 import { useState } from "react";
-import DatePicker from "react-date-picker";
-import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "react-bootstrap";
 import styles from "./Reportes.module.css";
+
 const COLORS = [
   "#0088FE",
   "#00C49F",
@@ -33,8 +32,10 @@ const Reportes = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [anio, setAnio] = useState(selectedDate.getFullYear());
   const [mes, setMes] = useState(selectedDate.getMonth() + 1);
-  const [fechaDesde, setFechaDesde] = useState();
-  const [fechaHasta, setFechaHasta] = useState();
+  const [fechaDesde, setFechaDesde] = useState("2024-01-01");
+  const obtenerFechaActual = () => new Date().toISOString().slice(0, 10);
+
+  const [fechaHasta, setFechaHasta] = useState(obtenerFechaActual);
 
   const urlMesYAnio = `/api/pedidos/contar-por-mes-anio?mes=${mes}&anio=${anio}`;
   const {
@@ -58,30 +59,39 @@ const Reportes = () => {
       <div>Error: {errorMesYAnio?.message || errorInstrumento?.message}</div>
     );
   }
-  // Transformar los datos de cantidad por mes y año para el gráfico de barras
+
   const transformedDataFecha = dataPorMesYAnio!.map((entry: any) => ({
     dia: entry[0],
     cantidad: entry[1],
   }));
-  console.log("data de cantidad en mes y año: ", dataPorMesYAnio);
-  console.log("Data transormada de fecha: ", transformedDataFecha);
-  console.log("data instrumento: ", dataPorInstrumento);
 
   const transformedData = dataPorInstrumento!.map((entry: any) => ({
-    instrumento: entry[1].instrumento, // Suponemos que el nombre del instrumento está en la segunda posición
-    count: entry[0], // Suponemos que la cantidad está en la primera posición
+    instrumento: entry[1].instrumento,
+    count: entry[0],
   }));
 
-  const handleDateChange = (event) => {
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const date = new Date(event.target.value);
     setSelectedDate(date);
     setAnio(date.getFullYear());
     setMes(date.getMonth() + 1);
   };
-  const handleDowloadExcel = async () => {
+
+  const handleFechaDesdeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFechaDesde(event.target.value);
+  };
+
+  const handleFechaHastaChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFechaHasta(event.target.value);
+  };
+
+  const handleDownloadExcel = async () => {
     try {
-      let urlServer =
-        "http://localhost:8080/api/reporte?fechaDesde=2023-01-01&fechaHasta=2024-12-31";
+      const urlServer = `http://localhost:8080/api/reporte?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`;
       const response = await fetch(urlServer, {
         method: "GET",
         headers: {
@@ -93,7 +103,6 @@ const Reportes = () => {
         throw new Error("Network response was not ok");
       }
 
-      //Aca manejo la respuesta
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -106,13 +115,28 @@ const Reportes = () => {
       console.error("Error al descargar el archivo:", error);
     }
   };
+
   return (
     <div className={styles.centerContent}>
-      <h2>
-        Reportes <Button onClick={handleDowloadExcel}>Descargar excel</Button>
-      </h2>
-
-      {/* Gráfico de barras para count por mes y año */}
+      <h1 className={styles.centerContentMargin}>
+        Reportes
+        <h3 className={styles.spacing}>
+          Generar reportes desde hasta
+          <input
+            className={styles.inputSpacing}
+            type="date"
+            value={fechaDesde}
+            onChange={handleFechaDesdeChange}
+          />
+          <input
+            className={styles.inputSpacing}
+            type="date"
+            value={fechaHasta}
+            onChange={handleFechaHastaChange}
+          />
+        </h3>
+        <Button onClick={handleDownloadExcel}>Descargar excel</Button>
+      </h1>
 
       <h3>
         Cantidad de pedidos por día en la fecha {selectedDate.getFullYear()}/
@@ -121,7 +145,7 @@ const Reportes = () => {
       <h3>
         <input
           type="month"
-          value={`${anio}-${String(mes + 1).padStart(2, "0")}`}
+          value={`${anio}-${String(mes).padStart(2, "0")}`}
           onChange={handleDateChange}
         />
       </h3>
@@ -138,7 +162,6 @@ const Reportes = () => {
         <Bar dataKey="cantidad" fill="#8884d8" />
       </BarChart>
 
-      {/* Gráfico de torta para count por instrumento */}
       <h3>Instrumentos mas vendidos</h3>
       <PieChart width={600} height={400}>
         <Pie
