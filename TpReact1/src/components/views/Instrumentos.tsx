@@ -72,7 +72,7 @@ const Instrumentos = () => {
   useEffect(() => {
     fetchCategorias();
     fetchInstrumentos();
-  }, [selectedCategory]); // Re-fetch instruments
+  }, [selectedCategory, instrumentos]); // Re-fetch instruments
 
   const handleAddInstrumento = (newInstrumento: Instrumento) => {
     // Funcionamiento para agregar instrumento

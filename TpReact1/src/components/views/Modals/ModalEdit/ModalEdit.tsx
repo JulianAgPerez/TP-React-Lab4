@@ -6,7 +6,7 @@ import { Formik, Field, Form } from "formik";
 type ModalProps = {
   show: boolean;
   handleClose: () => void;
-  handleEditInstrumento: (updatedInstrumento: Instrumento) => void;
+  handleEditInstrumento: (updatedInstrumento: Instrumento) => Promise<void>;
   instrumento: Instrumento;
 };
 
@@ -36,7 +36,7 @@ export const ModalEdit: FC<ModalProps> = ({
 
   const handleSubmit = async (values: Instrumento) => {
     console.log("Formulario enviado:", values);
-    handleEditInstrumento(values);
+    await handleEditInstrumento(values);
     handleClose();
   };
 
