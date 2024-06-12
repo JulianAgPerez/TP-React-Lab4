@@ -19,17 +19,20 @@ const Instrumentos = () => {
   const [instrumentosBaja, setInstrumentosBaja] = useState<Instrumento[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
-  const [selectedCategory, setSelectedCategory] = useState<Categoria | null>();
+  const [selectedCategory, setSelectedCategory] = useState<Categoria | null>(
+    null
+  );
 
-  const handleCloseAddModal = () => setShowAddModal(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  const [selectedInstrumento, setSelectedInstrumento] = useState<Instrumento>();
+  const [selectedInstrumento, setSelectedInstrumento] =
+    useState<Instrumento | null>(null);
   const notify = useNotify();
 
   const rol = useSelector((state: RootState) => state.auth?.rol);
 
-  //Lista categorias y guarda en setCategorias
+  // Lista categorias y guarda en setCategorias
   const fetchCategorias = async () => {
     try {
       const response = await fetch(
@@ -42,7 +45,8 @@ const Instrumentos = () => {
       console.log("error: ", error);
     }
   };
-  //Lista instrumentos
+
+  // Lista instrumentos
   const fetchInstrumentos = async () => {
     try {
       const response = await fetch(
@@ -58,7 +62,7 @@ const Instrumentos = () => {
         (instrumento: Instrumento) => instrumento.baja
       );
       setInstrumentos(instrumentosSinBaja);
-      //LO USARE PARA LISTAR DADOS DE BAJA
+      // LO USARE PARA LISTAR DADOS DE BAJA
       setInstrumentosBaja(instrumentosConBaja);
     } catch (error) {
       console.error("Error al obtener los instrumentos:", error);
@@ -83,7 +87,8 @@ const Instrumentos = () => {
     );
     setSelectedCategory(selected || null);
   };
-  //Filtrado
+
+  // Filtrado
   const arrayInstrumentosFiltrados = instrumentos.filter(
     (instrumento) => instrumento.idCategoria?.id === selectedCategory?.id
   );
@@ -101,7 +106,6 @@ const Instrumentos = () => {
           headers: {
             "Content-Type": "application/json",
           },
-
           body: JSON.stringify(updatedInstrumento),
         }
       );
@@ -143,7 +147,7 @@ const Instrumentos = () => {
         className={styles.contenedorPrincipal}
         style={{ display: "flex", justifyContent: "space-between" }}
       >
-        {/*BOTON AGREGAR INSTRUMENTO*/}
+        {/* BOTON AGREGAR INSTRUMENTO */}
         {rol === "Admin" && (
           <div className={styles.agregarInstrumento}>
             <h2>Agregar Instrumento</h2>
@@ -152,10 +156,13 @@ const Instrumentos = () => {
             </Button>
           </div>
         )}
-        {/*COMBOBOX CATEGORIA */}
+        {/* COMBOBOX CATEGORIA */}
         <div className={styles.filtrarPorCategoria}>
           <h2>Filtrar por Categoría</h2>
-          <select value={selectedCategory?.id} onChange={handleCategoryChange}>
+          <select
+            value={selectedCategory?.id ?? ""}
+            onChange={handleCategoryChange}
+          >
             <option value="">Todas las categorías</option>
             {categorias.map((categoria: Categoria) => (
               <option key={categoria.id} value={categoria.id}>
@@ -168,7 +175,7 @@ const Instrumentos = () => {
       </div>
       <ModalForm
         show={showAddModal}
-        handleClose={handleCloseAddModal}
+        handleClose={() => setShowAddModal(false)}
         handleAddInstrumento={handleAddInstrumento}
       />
       {/* RECORRE ARRAY */}
@@ -186,7 +193,7 @@ const Instrumentos = () => {
               >
                 $ {instrumento.precio}
               </h2>
-              {/*Costo Envio */}
+              {/* Costo Envio */}
               <span className={styles.robotoCuerpoNegrita}>
                 {instrumento.costoEnvio === "G" ||
                 instrumento.costoEnvio === "g" ? (
@@ -200,7 +207,7 @@ const Instrumentos = () => {
                       local_shipping
                     </span>
                     <p style={{ margin: "0" }}>
-                      Envío gratis para todo el país{" "}
+                      Envío gratis para todo el país
                     </p>
                   </div>
                 ) : (
@@ -212,7 +219,7 @@ const Instrumentos = () => {
                   </div>
                 )}
               </span>
-              {/*Vendidos */}
+              {/* Vendidos */}
               <p className={styles.robotoCuerpo}>
                 {instrumento.cantidadVendida} vendidos
               </p>
@@ -230,7 +237,7 @@ const Instrumentos = () => {
                 variant="primary"
                 onClick={() => {
                   setSelectedInstrumento(instrumento);
-                  setShowAddModal(true);
+                  setShowEditModal(true);
                 }}
               >
                 <FontAwesomeIcon icon={faEdit} />
@@ -238,8 +245,8 @@ const Instrumentos = () => {
             )}
             {/* Modal de edición */}
             <ModalEdit
-              show={showAddModal}
-              handleClose={() => setShowAddModal(false)}
+              show={showEditModal}
+              handleClose={() => setShowEditModal(false)}
               handleEditInstrumento={handleEditInstrumento}
               instrumento={selectedInstrumento!}
             />
