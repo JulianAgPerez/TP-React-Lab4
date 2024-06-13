@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
 import { Instrumento } from "../../types/types";
-import { addItem } from "../../redux/slices/CartSlice";
+import { addItems } from "../../redux/slices/CartSlice";
 import styles from "/src/styles/Instrumentos.module.css";
 import { useAppDispatch } from "../../redux/HookReducer";
 import useNotify from "../../Hooks/useNotify";
 import html2pdf from "html2pdf.js";
+import CantidadModal from "./Modals/CantidadModal";
 
 export const DetalleInstrumento: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [instrumento, setInstrumento] = useState<Instrumento | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const notify = useNotify();
   const dispatch = useAppDispatch();
 
@@ -31,16 +32,14 @@ export const DetalleInstrumento: React.FC = () => {
     fetchInstrumento();
   }, [id]);
 
-  const handleAgregarCarrito = () => {
+  const handleAgregarCarrito = (cantidad: number) => {
     if (instrumento) {
-      console.log(instrumento);
+      dispatch(addItems({ instrumento, cantidad }));
       notify("Agregado");
-      dispatch(addItem(instrumento));
     }
   };
 
   const handleDescargarPDF = () => {
-    // Ocultar los botones antes de generar el PDF
     document.querySelectorAll(".no-print").forEach((element) => {
       element.classList.add(styles.hidden);
     });
@@ -51,7 +50,6 @@ export const DetalleInstrumento: React.FC = () => {
         .from(element)
         .save(`detalle_instrumento_${id}.pdf`)
         .then(() => {
-          // Mostrar los botones después de generar el PDF
           document.querySelectorAll(".no-print").forEach((element) => {
             element.classList.remove(styles.hidden);
           });
@@ -116,7 +114,7 @@ export const DetalleInstrumento: React.FC = () => {
                 <button
                   className={`${styles.button} no-print`}
                   style={{ marginTop: "2rem", width: "13vw", height: "5vw" }}
-                  onClick={handleAgregarCarrito}
+                  onClick={() => setIsModalOpen(true)}
                 >
                   Agregar al carrito
                 </button>
@@ -139,6 +137,11 @@ export const DetalleInstrumento: React.FC = () => {
         Descripción:
         <div style={{ paddingTop: "2rem" }}>{instrumento.descripcion}</div>
       </div>
+      <CantidadModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleAgregarCarrito}
+      />
     </div>
   );
 };
