@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { emptPedido, Pedido } from "../../types/types";
+import { Pedido } from "../../types/types";
 
 interface PedidoState {
   pedidoActual: Pedido | undefined;

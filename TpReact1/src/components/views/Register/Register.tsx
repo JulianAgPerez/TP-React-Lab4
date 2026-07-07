@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import styles from "./Register.module.css";
 import { useForm } from "../../../Hooks/useForm";
@@ -42,7 +42,7 @@ export const Register = () => {
       );
       navigate("/");
     } catch (err) {
-      alert(err.message);
+      alert((err as Error).message);
     }
   };
 

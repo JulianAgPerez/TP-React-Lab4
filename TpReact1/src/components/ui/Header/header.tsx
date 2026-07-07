@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,12 +8,11 @@ import { setLogin, setLogout } from "../../../redux/slices/AuthSlice";
 
 export const HeaderHome = () => {
   const dispatch = useAppDispatch();
-  const rolFromState = useSelector((state: RootState) => state.auth?.rol);
-  const [rol, setRol] = useState<string | null>(rolFromState);
+  const auth = useSelector((state: RootState) => state.auth);
+  const rol = auth?.rol;
 
   const handleLogout = () => {
     dispatch(setLogout());
-    setRol(null); // Actualiza el estado local para reflejar el logout
   };
 
   useEffect(() => {
@@ -21,7 +20,6 @@ export const HeaderHome = () => {
     if (storedAuthUser) {
       const parsedAuthUser = JSON.parse(storedAuthUser);
       dispatch(setLogin(parsedAuthUser));
-      setRol(parsedAuthUser.rol);
     }
   }, []);
 
@@ -34,7 +32,7 @@ export const HeaderHome = () => {
       }
     }
   }, []);
-  //Me lleva al home y de ahi a la ubicacion
+
   const handleAnchorClick = (e: any) => {
     const href = e.currentTarget.getAttribute("href");
     if (href && href.startsWith("#")) {
@@ -75,7 +73,7 @@ export const HeaderHome = () => {
                 Donde estamos
               </a>
             </Nav.Item>
-            {(rolFromState == "Admin" || rolFromState == "Operador") && (
+            {(rol == "Admin" || rol == "Operador") && (
               <Nav.Item>
                 <Link to={"/reportes"} className="nav-link">
                   Reportes

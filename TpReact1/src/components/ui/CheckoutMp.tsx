@@ -16,8 +16,8 @@ export const CheckoutMp: React.FC<CheckoutMpProps> = ({ visible }) => {
   const [idPreference, setIdPreference] = useState<string>("");
 
   const getPreferenceMP = async () => {
-    if (items.length > 0) {
-      const response: PreferenceMp = await createPreferenceMp(pedido);
+    if (items.length > 0 && pedido) {
+      const response: PreferenceMp = await createPreferenceMp(pedido as number);
       console.log("Response: ", response);
       console.log("Response id: ", response.id);
       console.log(pedido);

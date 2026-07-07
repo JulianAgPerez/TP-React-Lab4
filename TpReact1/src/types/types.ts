@@ -11,7 +11,8 @@ export interface Instrumento{
 	idCategoria: Categoria,
 	baja: boolean
 }
-export const emptyInstrumento = {
+export const emptyInstrumento: Instrumento = {
+    id: 0,
     instrumento: "",
 	marca: "",
 	modelo: "",
@@ -20,7 +21,8 @@ export const emptyInstrumento = {
 	costoEnvio: "",
 	cantidadVendida: 0,
 	descripcion: "",
-	idCategoria: null
+	idCategoria: { id: 0, denominacion: "", baja: false },
+	baja: false
 }
 export interface Categoria {
 	id: number,

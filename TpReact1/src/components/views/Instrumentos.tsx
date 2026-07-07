@@ -16,7 +16,7 @@ import { RootState } from "../../redux/Store";
 
 const Instrumentos = () => {
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
-  const [instrumentosBaja, setInstrumentosBaja] = useState<Instrumento[]>([]);
+  const [_instrumentosBaja, _setInstrumentosBaja] = useState<Instrumento[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
   const [selectedCategory, setSelectedCategory] = useState<Categoria | null>(
@@ -64,7 +64,7 @@ const Instrumentos = () => {
       );
       setInstrumentos(instrumentosSinBaja);
       // LO USARE PARA LISTAR DADOS DE BAJA
-      setInstrumentosBaja(instrumentosConBaja);
+      _setInstrumentosBaja(instrumentosConBaja);
     } catch (error) {
       console.error("Error al obtener los instrumentos:", error);
     }

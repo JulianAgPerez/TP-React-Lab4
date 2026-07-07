@@ -60,12 +60,15 @@ const Reportes = () => {
     );
   }
 
-  const transformedDataFecha = dataPorMesYAnio!.map((entry: any) => ({
+  const rawFecha = dataPorMesYAnio as unknown as [number, number][];
+  const rawInstrumento = dataPorInstrumento as unknown as [number, { instrumento: string }][];
+
+  const transformedDataFecha = rawFecha.map((entry) => ({
     dia: entry[0],
     cantidad: entry[1],
   }));
 
-  const transformedData = dataPorInstrumento!.map((entry: any) => ({
+  const transformedData = rawInstrumento.map((entry) => ({
     instrumento: entry[1].instrumento,
     count: entry[0],
   }));
@@ -140,7 +143,7 @@ const Reportes = () => {
 
       <h3>
         Cantidad de pedidos por día en la fecha {selectedDate.getFullYear()}/
-        {selectedDate.getMonth() + 2}
+        {selectedDate.getMonth() + 1}
       </h3>
       <h3>
         <input
@@ -165,7 +168,7 @@ const Reportes = () => {
       <h3>Instrumentos mas vendidos</h3>
       <PieChart width={600} height={400}>
         <Pie
-          data={transformedData!}
+          data={transformedData}
           dataKey="count"
           nameKey="instrumento"
           cx="50%"
@@ -173,7 +176,7 @@ const Reportes = () => {
           outerRadius={100}
           fill="#8884d8"
         >
-          {transformedData.map((entry: any, index: number) => (
+          {transformedData.map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>

@@ -42,7 +42,7 @@ export const Login = () => {
       );
       navigate("/");
     } catch (err) {
-      alert(err.message);
+      alert((err as Error).message);
     }
   };
 

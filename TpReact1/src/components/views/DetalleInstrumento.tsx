@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { Instrumento } from "../../types/types";
 import { addItems } from "../../redux/slices/CartSlice";
 import styles from "/src/styles/Instrumentos.module.css";
