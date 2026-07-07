@@ -1,5 +1,4 @@
 .lds-ripple {
-    
     color: #ac6e34
   }
 .lds-ripple,
@@ -11,6 +10,13 @@
   position: relative;
   width: 80px;
   height: 80px;
+}
+
+.loaderWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
 }
 .lds-ripple div {
   position: absolute;

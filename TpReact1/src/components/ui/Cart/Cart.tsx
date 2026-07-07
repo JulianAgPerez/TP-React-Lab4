@@ -96,22 +96,20 @@ const Cart: React.FC = () => {
                 {item.instrumento.instrumento} -
                 <Button
                   onClick={() => dispatch(reduceItem(item.instrumento))}
-                  style={{ fontSize: "0.5em", marginRight: "4px" }}
+                  size="sm"
+                  variant="outline-secondary"
+                  style={{ marginRight: "4px" }}
                 >
-                  <FontAwesomeIcon
-                    icon={faMinus}
-                    style={{ fontSize: "1.5em" }}
-                  />
+                  <FontAwesomeIcon icon={faMinus} />
                 </Button>
-                x{item.cantidad}
+                <span style={{ margin: "0 6px", fontWeight: 600 }}>{item.cantidad}</span>
                 <Button
                   onClick={() => dispatch(addItem(item.instrumento))}
-                  style={{ fontSize: "0.5em", marginLeft: "4px" }}
+                  size="sm"
+                  variant="outline-secondary"
+                  style={{ marginLeft: "4px" }}
                 >
-                  <FontAwesomeIcon
-                    icon={faPlus}
-                    style={{ fontSize: "1.5em" }}
-                  />
+                  <FontAwesomeIcon icon={faPlus} />
                 </Button>
                 - ${item.instrumento.precio * item.cantidad}
               </li>

@@ -146,128 +146,123 @@ const Instrumentos = () => {
 
   return (
     <div>
-      <div
-        className={styles.contenedorPrincipal}
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        {/* BOTON AGREGAR INSTRUMENTO */}
-        {rol === "Admin" && (
-          <div className={styles.agregarInstrumento}>
-            <h2>Agregar Instrumento</h2>
-            <Button variant="primary" onClick={() => setShowAddModal(true)}>
-              Agregar
-            </Button>
+      <div className={styles.contenedorPrincipal}>
+        <div>
+          <div className={styles.toolbarLeft}>
+            {rol === "Admin" && (
+              <div className={styles.agregarInstrumento}>
+                <h2>Agregar Instrumento</h2>
+                <Button variant="primary" onClick={() => setShowAddModal(true)}>
+                  Agregar
+                </Button>
+              </div>
+            )}
+            <div className={styles.filtrarPorCategoria}>
+              <h2>Filtrar por Categoría</h2>
+              <select
+                value={selectedCategory?.id ?? ""}
+                onChange={handleCategoryChange}
+              >
+                <option value="">Todas las categorías</option>
+                {categorias.map((categoria: Categoria) => (
+                  <option key={categoria.id} value={categoria.id}>
+                    {categoria.denominacion}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-        )}
-        {/* COMBOBOX CATEGORIA */}
-        <div className={styles.filtrarPorCategoria}>
-          <h2>Filtrar por Categoría</h2>
-          <select
-            value={selectedCategory?.id ?? ""}
-            onChange={handleCategoryChange}
-          >
-            <option value="">Todas las categorías</option>
-            {categorias.map((categoria: Categoria) => (
-              <option key={categoria.id} value={categoria.id}>
-                {categoria.denominacion}
-              </option>
+          <div className={styles.productsList}>
+            {results.map((instrumento: Instrumento) => (
+              <div key={instrumento.id} className={styles.containerInstrumento}>
+                <img src={`/img/${instrumento.imagen}`} />
+                <div className={styles.containerTextoInstrumento}>
+                  <h3 className={styles.robotoTitulo}>{instrumento.instrumento}</h3>
+                  <h2
+                    className={styles.robotoCuerpo}
+                    style={{ fontSize: "1.6rem", fontWeight: "400" }}
+                  >
+                    $ {instrumento.precio}
+                  </h2>
+                  <span className={styles.robotoCuerpoNegrita}>
+                    {instrumento.costoEnvio === "G" ||
+                    instrumento.costoEnvio === "g" ? (
+                      <div
+                        className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoGratis}`}
+                      >
+                        <span
+                          className="material-symbols-outlined"
+                          style={{ marginRight: "5px" }}
+                        >
+                          local_shipping
+                        </span>
+                        <p style={{ margin: "0" }}>
+                          Envío gratis para todo el país
+                        </p>
+                      </div>
+                    ) : (
+                      <div
+                        className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoPago}`}
+                      >
+                        Costo de Envío interior de Argentina $
+                        {instrumento.costoEnvio}
+                      </div>
+                    )}
+                  </span>
+                  <p className={styles.robotoCuerpo}>
+                    {instrumento.cantidadVendida} vendidos
+                  </p>
+                </div>
+                {rol === "Admin" && (
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDeleteInstrumento(instrumento.id)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
+                )}
+                {(rol === "Admin" || rol === "Operador") && (
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      setSelectedInstrumento(instrumento);
+                      setShowEditModal(true);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faEdit} />
+                  </Button>
+                )}
+                <ModalEdit
+                  show={showEditModal}
+                  handleClose={() => setShowEditModal(false)}
+                  handleEditInstrumento={handleEditInstrumento}
+                  instrumento={selectedInstrumento!}
+                />
+                <Link to={`/productos/${instrumento.id}`}>
+                  <button
+                    className={styles.button}
+                    style={{
+                      marginLeft: "2rem",
+                      width: "13vw",
+                      height: "5vw",
+                    }}
+                  >
+                    Ver detalles
+                  </button>
+                </Link>
+              </div>
             ))}
-          </select>
+          </div>
         </div>
-        <Cart />
+        <div>
+          <Cart />
+        </div>
       </div>
       <ModalForm
         show={showAddModal}
         handleClose={() => setShowAddModal(false)}
         handleAddInstrumento={handleAddInstrumento}
       />
-      {/* RECORRE ARRAY */}
-      {results.map((instrumento: Instrumento) => (
-        <div key={instrumento.id}>
-          <div className={styles.containerInstrumento}>
-            <img src={`/img/${instrumento.imagen}`} />
-            {/* Nombre instrumento */}
-            <div className={styles.containerTextoInstrumento}>
-              <h3 className={styles.robotoTitulo}>{instrumento.instrumento}</h3>
-              {/* Precio */}
-              <h2
-                className={styles.robotoCuerpo}
-                style={{ fontSize: "1.6rem", fontWeight: "400" }}
-              >
-                $ {instrumento.precio}
-              </h2>
-              {/* Costo Envio */}
-              <span className={styles.robotoCuerpoNegrita}>
-                {instrumento.costoEnvio === "G" ||
-                instrumento.costoEnvio === "g" ? (
-                  <div
-                    className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoGratis}`}
-                  >
-                    <span
-                      className="material-symbols-outlined"
-                      style={{ marginRight: "5px" }}
-                    >
-                      local_shipping
-                    </span>
-                    <p style={{ margin: "0" }}>
-                      Envío gratis para todo el país
-                    </p>
-                  </div>
-                ) : (
-                  <div
-                    className={`${styles.costoEnvioTexto} ${styles.costoEnvioTextoPago}`}
-                  >
-                    Costo de Envío interior de Argentina $
-                    {instrumento.costoEnvio}
-                  </div>
-                )}
-              </span>
-              {/* Vendidos */}
-              <p className={styles.robotoCuerpo}>
-                {instrumento.cantidadVendida} vendidos
-              </p>
-            </div>
-            {rol === "Admin" && (
-              <Button
-                variant="danger"
-                onClick={() => handleDeleteInstrumento(instrumento.id)}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </Button>
-            )}
-            {(rol === "Admin" || rol === "Operador") && (
-              <Button
-                variant="primary"
-                onClick={() => {
-                  setSelectedInstrumento(instrumento);
-                  setShowEditModal(true);
-                }}
-              >
-                <FontAwesomeIcon icon={faEdit} />
-              </Button>
-            )}
-            {/* Modal de edición */}
-            <ModalEdit
-              show={showEditModal}
-              handleClose={() => setShowEditModal(false)}
-              handleEditInstrumento={handleEditInstrumento}
-              instrumento={selectedInstrumento!}
-            />
-            <Link to={`/productos/${instrumento.id}`}>
-              <button
-                className={styles.button}
-                style={{
-                  marginLeft: "2rem",
-                  width: "13vw",
-                  height: "5vw",
-                }}
-              >
-                Ver detalles
-              </button>
-            </Link>
-          </div>
-        </div>
-      ))}
     </div>
   );
 };
