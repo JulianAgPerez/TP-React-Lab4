@@ -14,6 +14,9 @@ import Reportes from "./components/views/Reportes/Reportes.tsx";
 import { Roles } from "./types/types.ts";
 import { RutaPrivada } from "./ControlAcceso/RutaPrivada.tsx";
 import { Register } from "./components/views/Register/Register.tsx";
+import { setupMockFetch } from "./services/mockFetch";
+
+setupMockFetch();
 
 export const baseUrl = import.meta.env.VITE_API_URL;
 
